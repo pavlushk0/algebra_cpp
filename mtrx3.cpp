@@ -14,24 +14,60 @@
 	(1	3)
 */
 
-int32_t id_rw(int32_t i, int32_t j, int32_t n) {
+constexpr int32_t id_rw(int32_t i, int32_t j, int32_t n) {
 	return (i*n + j);
 }
 
-int32_t id_cw(int32_t i, int32_t j, int32_t n) {
+constexpr int32_t id_cw(int32_t i, int32_t j, int32_t n) {
 	return (j*n + i);
 }
 
-mtrx3_t mtrx3_set(mtrx3_t m) {
+mtrx3_t	mtrx3_copy(const mtrx3_t &m) {
 	mtrx3_t rt;
 	int32_t i, j;
-	int32_t n = 3;
 
-	for (i = 0; i < n; i++) {
-		for (j = 0; j < n; j++) {
-			rt[id_rw(i, j, n)] = m[id_rw(i, j, n)];
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			rt[id_rw(i, j, 3)] = m[id_rw(i, j, 3)];
 		}
 	}
+
+	return rt;
+}
+
+void mtrx3_show(const mtrx3_t &m) {
+	printf("%5.2f %5.2f %5.2f\n", m[0], m[1], m[2]);
+	printf("%5.2f %5.2f %5.2f\n", m[3], m[4], m[5]);
+	printf("%5.2f %5.2f %5.2f\n", m[6], m[7], m[8]);
+}
+
+mtrx3_t mtrx3_zero() {
+	mtrx3_t rt;
+	int32_t i;
+
+	for (i = 0; i < 9; i++) {
+		rt[i] = 0.0f;
+	}
+
+	return rt;
+}
+
+mtrx3_t mtrx3_set(float a00, float a01, float a02,
+                  float a10, float a11, float a12,
+                  float a20, float a21, float a22) {
+	mtrx3_t rt;
+
+	rt[0] = a00;
+	rt[1] = a01;
+	rt[2] = a02;
+
+	rt[3] = a10;
+	rt[4] = a11;
+	rt[5] = a12;
+
+	rt[6] = a20;
+	rt[7] = a21;
+	rt[8] = a22;
 
 	return rt;
 }
@@ -62,7 +98,7 @@ mtrx3_t mtrx3_set_euler(float yaw, float pitch, float roll) {
 	return rt;
 }
 
-mtrx3_t mtrx3_set_axisangl(vec3_t ax, float phi) {
+mtrx3_t mtrx3_set_axisangl(vec3_t &ax, float phi) {
 	mtrx3_t rt;
 	float cosphi, sinphi, vxvy, vxvz, vyvz, vx, vy, vz;
 
@@ -89,14 +125,8 @@ mtrx3_t mtrx3_set_axisangl(vec3_t ax, float phi) {
 
 	return rt;
 }
-/*
-func mtrx3_show(m mtrx3_t) {
-	fmt.Printf("%5.2f %5.2f %5.2f\n", m[0], m[1], m[2])
-	fmt.Printf("%5.2f %5.2f %5.2f\n", m[3], m[4], m[5])
-	fmt.Printf("%5.2f %5.2f %5.2f\n", m[6], m[7], m[8])
-}
-*/
-mtrx3_t mtrx3_get_idtt() {
+
+mtrx3_t mtrx3_idtt() {
 	mtrx3_t rt;
 	int32_t i, j;
 	int32_t n = 3;
@@ -114,15 +144,15 @@ mtrx3_t mtrx3_get_idtt() {
 	return rt;
 }
 
-float mtrx3_det(mtrx3_t m) {
+float mtrx3_det(const mtrx3_t &m) {
 	return m[0]*m[4]*m[8] +
-		m[6]*m[1]*m[5] +
-		m[2]*m[3]*m[7] -
-		m[0]*m[7]*m[5] -
-		m[8]*m[3]*m[1];
+		   m[6]*m[1]*m[5] +
+		   m[2]*m[3]*m[7] -
+		   m[0]*m[7]*m[5] -
+		   m[8]*m[3]*m[1];
 }
 
-mtrx3_t mtrx3_mult(mtrx3_t a, mtrx3_t b) {
+mtrx3_t mtrx3_mult(const mtrx3_t &a, const mtrx3_t &b) {
 	mtrx3_t rt;
 	int32_t i, j;
 	int32_t	n = 3;
@@ -139,7 +169,7 @@ mtrx3_t mtrx3_mult(mtrx3_t a, mtrx3_t b) {
 	return rt;
 }
 
-vec3_t mtrx3_mult_vec3(mtrx3_t m, vec3_t v) {
+vec3_t mtrx3_mult_vec3(const mtrx3_t &m, const vec3_t &v) {
 	vec3_t rt;
 
 	rt[_XC] = m[0]*v[_XC] + m[1]*v[_YC] + m[2]*v[_ZC];
@@ -200,7 +230,7 @@ func mtrx3_lu(m mtrx3_t) (l, u mtrx3_t) {
 /*
 	Нижнетреугольная (L, lm) матрица имеет единицы по диагонали
 */
-tuple<mtrx3_t, mtrx3_t> mtrx3_lu(mtrx3_t m) {
+tuple<mtrx3_t, mtrx3_t> mtrx3_lu(const mtrx3_t &m) {
 	mtrx3_t lm, um;
 	int32_t	i, j, k; 
 	int32_t n = 3;
@@ -231,7 +261,7 @@ tuple<mtrx3_t, mtrx3_t> mtrx3_lu(mtrx3_t m) {
 	return {lm, um};
 }
 
- tuple<mtrx3_t, vec3_t> mtrx3_ldlt(mtrx3_t m) {
+ tuple<mtrx3_t, vec3_t> mtrx3_ldlt(const mtrx3_t &m) {
 	mtrx3_t lm;
 	vec3_t dv;
 	int32_t	i, j, k; 
@@ -260,7 +290,7 @@ tuple<mtrx3_t, mtrx3_t> mtrx3_lu(mtrx3_t m) {
 	return {lm, dv};
 }
 
-mtrx3_t mtrx3_get_transpose(mtrx3_t m) {
+mtrx3_t mtrx3_get_transpose(const mtrx3_t &m) {
 	mtrx3_t rt;
 	int32_t i, j;
 	int32_t n = 3;
@@ -279,7 +309,7 @@ mtrx3_t mtrx3_get_transpose(mtrx3_t m) {
 	return rt;
 }
 
-void mtrx3_tranpose_self(mtrx3_t m) {
+void mtrx3_tranpose_self(mtrx3_t &m) {
 	int32_t i, j;
 	int32_t n = 3;
 	float tmp;
@@ -291,4 +321,43 @@ void mtrx3_tranpose_self(mtrx3_t m) {
 			m[id_rw(j, i, n)] = tmp;
 		}
 	}
-};
+}
+
+mtrx3_t	mtrx3_get_inv(const mtrx3_t &m) {
+	mtrx3_t inverse, rt;
+	float det, invDet;
+
+	inverse[id_rw(0, 0, 3)] = m[id_rw(1, 1, 3)] * m[id_rw(2, 2, 3)] - m[id_rw(1, 2, 3)] * m[id_rw(2, 1, 3)];
+	inverse[id_rw(1, 0, 3)] = m[id_rw(1, 2, 3)] * m[id_rw(2, 0, 3)] - m[id_rw(1, 0, 3)] * m[id_rw(2, 2, 3)];
+	inverse[id_rw(2, 0, 3)] = m[id_rw(1, 0, 3)] * m[id_rw(2, 1, 3)] - m[id_rw(1, 1, 3)] * m[id_rw(2, 0, 3)];
+
+	det = m[id_rw(0, 0, 3)] * inverse[id_rw(0, 0, 3)] + m[id_rw(0, 1, 3)] * inverse[id_rw(1, 0, 3)] + 
+		  m[id_rw(0, 2, 3)] * inverse[id_rw(2, 0, 3)];
+
+	if (fabs(det) < f_eps) {
+		return mtrx3_idtt();
+	}
+
+	invDet = 1.0f / det;
+
+	inverse[id_rw(0, 1, 3)] = m[id_rw(0, 2, 3)] * m[id_rw(2, 1, 3)] - m[id_rw(0, 1, 3)] * m[id_rw(2, 2, 3)];
+	inverse[id_rw(0, 2, 3)] = m[id_rw(0, 1, 3)] * m[id_rw(1, 2, 3)] - m[id_rw(0, 2, 3)] * m[id_rw(1, 1, 3)];
+	inverse[id_rw(1, 1, 3)] = m[id_rw(0, 0, 3)] * m[id_rw(2, 2, 3)] - m[id_rw(0, 2, 3)] * m[id_rw(2, 0, 3)];
+	inverse[id_rw(1, 2, 3)] = m[id_rw(0, 2, 3)] * m[id_rw(1, 0, 3)] - m[id_rw(0, 0, 3)] * m[id_rw(1, 2, 3)];
+	inverse[id_rw(2, 1, 3)] = m[id_rw(0, 1, 3)] * m[id_rw(2, 0, 3)] - m[id_rw(0, 0, 3)] * m[id_rw(2, 1, 3)];
+	inverse[id_rw(2, 2, 3)] = m[id_rw(0, 0, 3)] * m[id_rw(1, 1, 3)] - m[id_rw(0, 1, 3)] * m[id_rw(1, 0, 3)];
+
+	rt[id_rw(0, 0, 3)] = inverse[id_rw(0, 0, 3)] * invDet;
+	rt[id_rw(0, 1, 3)] = inverse[id_rw(0, 1, 3)] * invDet;
+	rt[id_rw(0, 2, 3)] = inverse[id_rw(0, 2, 3)] * invDet;
+
+	rt[id_rw(1, 0, 3)] = inverse[id_rw(1, 0, 3)] * invDet;
+	rt[id_rw(1, 1, 3)] = inverse[id_rw(1, 1, 3)] * invDet;
+	rt[id_rw(1, 2, 3)] = inverse[id_rw(1, 2, 3)] * invDet;
+
+	rt[id_rw(2, 0, 3)] = inverse[id_rw(2, 0, 3)] * invDet;
+	rt[id_rw(2, 1, 3)] = inverse[id_rw(2, 1, 3)] * invDet;
+	rt[id_rw(2, 2, 3)] = inverse[id_rw(2, 2, 3)] * invDet;
+
+	return rt;
+}
