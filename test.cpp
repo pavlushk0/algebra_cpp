@@ -18,10 +18,12 @@ int main(int argc, char *argv[]) {
 
 	auto ret = mtrx3_lu(m);
 
-	mtrx3_show(std::get<0>(ret));
+	lm = std::get<0>(ret);
+	mtrx3_show(lm);
 	printf("\n");
 
-	mtrx3_show(std::get<0>(ret));
+	um = std::get<1>(ret);
+	mtrx3_show(um);
 	printf("\n");
 
 	mm = mtrx3_mult(um, lm);

@@ -4,15 +4,15 @@
 #include <cmath>
 #include "algebra.h"
 
-constexpr int32_t mrange = 4;
+constexpr int32_t mrange = 3;
 
 mtrx3_t	mtrx3_copy(const mtrx3_t &m) {
 	mtrx3_t rt;
 	int32_t i, j;
 
-	for (i = 0; i < 3; i++) {
-		for (j = 0; j < 3; j++) {
-			rt[id_rw(i, j, 3)] = m[id_rw(i, j, 3)];
+	for (i = 0; i < mrange; i++) {
+		for (j = 0; j < mrange; j++) {
+			rt[id_rw(i, j, mrange)] = m[id_rw(i, j, mrange)];
 		}
 	}
 
@@ -113,14 +113,13 @@ mtrx3_t mtrx3_set_axisangl(vec3_t &ax, float phi) {
 mtrx3_t mtrx3_idtt() {
 	mtrx3_t rt;
 	int32_t i, j;
-	int32_t n = 3;
 
-	for (i = 0; i < n; i++) {
-		for (j = 0; j < n; j++) {
+	for (i = 0; i < mrange; i++) {
+		for (j = 0; j < mrange; j++) {
 			if (i == j) {
-				rt[id_rw(i, j, n)] = 1.0;
+				rt[id_rw(i, j, mrange)] = 1.0f;
 			} else {
-				rt[id_rw(i, j, n)] = 0.0;
+				rt[id_rw(i, j, mrange)] = 0.0f;
 			}
 		}
 	}
@@ -139,14 +138,13 @@ float mtrx3_det(const mtrx3_t &m) {
 mtrx3_t mtrx3_mult(const mtrx3_t &a, const mtrx3_t &b) {
 	mtrx3_t rt;
 	int32_t i, j;
-	int32_t	n = 3;
 	
-	for (i = 0; i < n; i++) {
-		for (j = 0; j < n; j++) {
-			rt[id_rw(i, j, n)] =
-				a[id_rw(0, j, n)]*b[id_rw(i, 0, n)] +
-					a[id_rw(1, j, n)]*b[id_rw(i, 1, n)] +
-					a[id_rw(2, j, n)]*b[id_rw(i, 2, n)];
+	for (i = 0; i < mrange; i++) {
+		for (j = 0; j < mrange; j++) {
+			rt[id_rw(i, j, mrange)] =
+				a[id_rw(0, j, mrange)]*b[id_rw(i, 0, mrange)] +
+					a[id_rw(1, j, mrange)]*b[id_rw(i, 1, mrange)] +
+					a[id_rw(2, j, mrange)]*b[id_rw(i, 2, mrange)];
 		}
 	}
 
@@ -217,27 +215,26 @@ func mtrx3_lu(m mtrx3_t) (l, u mtrx3_t) {
 tuple<mtrx3_t, mtrx3_t> mtrx3_lu(const mtrx3_t &m) {
 	mtrx3_t lm, um;
 	int32_t	i, j, k; 
-	int32_t n = 3;
 	float sum;
 
-	for (i = 0; i < n; i++) {
-		for (k = i; k < n; k++) {
+	for (i = 0; i < mrange; i++) {
+		for (k = i; k < mrange; k++) {
 			sum = 0;
 			for (j = 0; j < i; j++) {
-				sum += (lm[id_rw(i, j, n)] * um[id_rw(j, k, n)]);
+				sum += (lm[id_rw(i, j, mrange)] * um[id_rw(j, k, mrange)]);
 			}
-			um[id_rw(i, k, n)] = m[id_rw(i, k, n)] - sum;
+			um[id_rw(i, k, mrange)] = m[id_rw(i, k, mrange)] - sum;
 		}
 
-		for (k = i; k < n; k++) {
+		for (k = i; k < mrange; k++) {
 			if (i == k) {
-				lm[id_rw(i, i, n)] = 1.0;
+				lm[id_rw(i, i, mrange)] = 1.0;
 			} else {
 				sum = 0;
 				for (j = 0; j < i; j++) {
-					sum += lm[id_rw(k, j, n)] * um[id_rw(j, i, n)];
+					sum += lm[id_rw(k, j, mrange)] * um[id_rw(j, i, mrange)];
 				}
-				lm[id_rw(k, i, n)] = (m[id_rw(k, i, n)] - sum) / um[id_rw(i, i, n)];
+				lm[id_rw(k, i, mrange)] = (m[id_rw(k, i, mrange)] - sum) / um[id_rw(i, i, mrange)];
 			}
 		}
 	}
@@ -249,23 +246,22 @@ tuple<mtrx3_t, mtrx3_t> mtrx3_lu(const mtrx3_t &m) {
 	mtrx3_t lm;
 	vec3_t dv;
 	int32_t	i, j, k; 
-	int32_t n = 3;
 	float sum;
 
-	for (i = 0; i < n; i++) {
-		for (j = i; j < n; j++) {
-			sum = m[id_rw(j, i, n)];
+	for (i = 0; i < mrange; i++) {
+		for (j = i; j < mrange; j++) {
+			sum = m[id_rw(j, i, mrange)];
 			for (k = 0; k < i; k++) {
-				sum = sum - lm[id_rw(i, k, n)]*dv[k]*lm[id_rw(j, k, n)];
+				sum = sum - lm[id_rw(i, k, mrange)]*dv[k]*lm[id_rw(j, k, mrange)];
 				if (i == j) {
 					if (sum <= 0) {
-						//fmt.Println("A is not positive deﬁnite")
-						//return mtrx3_get_idtt(), vec3_set(0.0, 0.0, 0.0)
+						cout << "mtrx3_ldlt(): matrix is not positive definite \n" ;
+						return {mtrx3_idtt(), vec3_zero()};
 					}
 					dv[i] = sum;
-					lm[id_rw(i, i, n)] = 1.0;
+					lm[id_rw(i, i, mrange)] = 1.0;
 				} else {
-					lm[id_rw(j, i, n)] = sum / dv[i];
+					lm[id_rw(j, i, mrange)] = sum / dv[i];
 				}
 			}
 		}
@@ -277,16 +273,15 @@ tuple<mtrx3_t, mtrx3_t> mtrx3_lu(const mtrx3_t &m) {
 mtrx3_t mtrx3_get_transpose(const mtrx3_t &m) {
 	mtrx3_t rt;
 	int32_t i, j;
-	int32_t n = 3;
 	float tmp;
 
 	rt = m;
 
-	for (i = 0; i < n; i++) {
+	for (i = 0; i < mrange; i++) {
 		for (j = 0; j < i; j++) {
-			tmp = rt[id_rw(i, i, n)];
-			rt[id_rw(i, j, n)] = rt[id_rw(j, i, n)];
-			rt[id_rw(j, i, n)] = tmp;
+			tmp = rt[id_rw(i, i, mrange)];
+			rt[id_rw(i, j, mrange)] = rt[id_rw(j, i, mrange)];
+			rt[id_rw(j, i, mrange)] = tmp;
 		}
 	}
 
@@ -295,14 +290,13 @@ mtrx3_t mtrx3_get_transpose(const mtrx3_t &m) {
 
 void mtrx3_tranpose_self(mtrx3_t &m) {
 	int32_t i, j;
-	int32_t n = 3;
 	float tmp;
 
-	for (i = 0; i < n; i++) {
+	for (i = 0; i < mrange; i++) {
 		for (j = 0; j < i; j++) {
-			tmp = m[id_rw(i, i, n)];
-			m[id_rw(i, j, n)] = m[id_rw(j, i, n)];
-			m[id_rw(j, i, n)] = tmp;
+			tmp = m[id_rw(i, i, mrange)];
+			m[id_rw(i, j, mrange)] = m[id_rw(j, i, mrange)];
+			m[id_rw(j, i, mrange)] = tmp;
 		}
 	}
 }

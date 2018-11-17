@@ -142,6 +142,7 @@ typedef array<float, 3> vec3_t;
 typedef array<float, 9> mtrx3_t;
 typedef array<float, 16> mtrx4_t;
 typedef array<float, 4> qtnn_t;
+typedef array<float, 4> vec4_t;
 */
 
 const float f_eps = 0.00001f;
