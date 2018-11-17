@@ -2,25 +2,9 @@
 #include <iostream>
 #include <tuple>
 #include <cmath>
-#include "algebra.hpp"
+#include "algebra.h"
 
-/*	multidimensional array mapping, array[i][j]
-	row-wise (C, C++):
-	(0	1)
-	(2	3)
-
-	column-wise (Fortran, Matlab):
-	(0	2)
-	(1	3)
-*/
-
-constexpr int32_t id_rw(int32_t i, int32_t j, int32_t n) {
-	return (i*n + j);
-}
-
-constexpr int32_t id_cw(int32_t i, int32_t j, int32_t n) {
-	return (j*n + i);
-}
+constexpr int32_t mrange = 4;
 
 mtrx3_t	mtrx3_copy(const mtrx3_t &m) {
 	mtrx3_t rt;

@@ -111,6 +111,30 @@ class mtrx4_t {
 		float data[16];
 };
 
+class vec4_t {
+	public:
+		float operator[](const int32_t id) const {
+			return data[id];
+		};
+
+		float &operator[](const int32_t id) {
+			return data[id];
+		};
+
+		vec4_t(): 
+			data{0.0, 0.0, 0.0, 0.0} {};
+		
+		vec4_t(const float x, const float y, const float z, const float w): 
+			data{x, y, z, w} {};
+		
+		vec4_t(const vec4_t &v): 
+			data{v[_XC], v[_YC], v[_ZC], v[_WC]} {};
+
+		~vec4_t() {};
+	
+	private:
+		float data[4];
+};
 /*
 	Redefinition by std::array
 
@@ -121,6 +145,24 @@ typedef array<float, 4> qtnn_t;
 */
 
 const float f_eps = 0.00001f;
+
+/*	multidimensional array mapping, array[i][j]
+	row-wise (C, C++):
+	(0	1)
+	(2	3)
+
+	column-wise (Fortran, Matlab):
+	(0	2)
+	(1	3)
+*/
+
+constexpr int32_t id_rw(int32_t i, int32_t j, int32_t n) {
+	return (i*n + j);
+};
+
+constexpr int32_t id_cw(int32_t i, int32_t j, int32_t n) {
+	return (j*n + i);
+};
 
 vec3_t  vec3_copy(const vec3_t &v);
 void 	vec3_show(const vec3_t &v);
@@ -136,9 +178,6 @@ float	vec3_dot(const vec3_t &a, const vec3_t &b);
 vec3_t	vec3_sum(const vec3_t &a, const vec3_t &b);
 vec3_t	vec3_sub(const vec3_t &a, const vec3_t &b);
 vec3_t  vec3_cross(const vec3_t &a, const vec3_t &b);
-	
-constexpr int32_t id_rw(int32_t i, int32_t j, int32_t n);
-constexpr int32_t id_cw(int32_t i, int32_t j, int32_t n);
 
 mtrx3_t	mtrx3_copy(const mtrx3_t &m);
 mtrx3_t mtrx3_zero();
@@ -177,3 +216,18 @@ qtnn_t  qtnn_from_axisangl(const vec3_t &a, float phi);
 qtnn_t	qtnn_from_euler(float yaw, float pitch, float roll); 
 vec3_t  qtnn_to_vec3(const qtnn_t &q);
 vec3_t  qtnn_transform_vec3(const qtnn_t &a, const vec3_t &b);
+
+mtrx4_t	mtrx4_copy(const mtrx4_t &m);
+mtrx4_t mtrx4_zero();
+mtrx4_t mtrx4_set(float a00, float a01, float a02, float a03,
+                  float a10, float a11, float a12, float a13,
+                  float a20, float a21, float a22, float a23,
+                  float a30, float a31, float a32, float a33);
+void	mtrx4_show(const mtrx4_t &m);
+mtrx4_t	mtrx4_idtt();
+tuple<mtrx4_t, mtrx4_t>	mtrx4_lu(const mtrx4_t &m);
+tuple<mtrx4_t, vec3_t>	mtrx4_ldlt(const mtrx4_t &m);
+mtrx4_t	mtrx4_get_transpose(const mtrx4_t &m);
+void	mtrx4_tranpose_self(mtrx4_t &m);
+mtrx4_t mtrx4_get_inv(const mtrx4_t &m);
+mtrx4_t mtrx4_get_inv_gauss(const mtrx4_t &m); //empty

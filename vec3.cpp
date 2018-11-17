@@ -2,7 +2,7 @@
 #include <iostream>
 #include <tuple>
 #include <cmath>
-#include "algebra.hpp"
+#include "algebra.h"
 
 using namespace std;
 
