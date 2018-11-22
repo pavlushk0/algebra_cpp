@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	mtrx_show(m);
 	printf("\n");
 
-	auto ret = mtrx_lu(m);
+	auto ret = mtrx_lu<mtrx4_t, 4>(m);
 
 	lm = std::get<0>(ret);
 	mtrx_show(lm);
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 	mtrx_show(um);
 	printf("\n");
 
-	mm = mtrx_mult(um, lm);
+	mm = mtrx_mult<mtrx4_t, 4>(um, lm);
 
 	mtrx_show(mm);
 	printf("\n");

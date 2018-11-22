@@ -94,8 +94,6 @@ class qtnn_t {
 
 class mtrx4_t {
 	public:
-		int mrange = 4;
-
 		float operator[](const int32_t id) const {
 			return data[id];
 		};
@@ -199,14 +197,16 @@ void	mtrx_show(const mtrx3_t &m);
 void	mtrx_show(const mtrx4_t &m);
 float	mtrx_det(const mtrx3_t &m);
 
-template <typename mtrxT_t>
+template <typename mtrxT_t, int mrange>
 mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b);
 
 vec3_t	mtrx_mult_vec3(const mtrx3_t &m, const vec3_t &v);
-tuple<mtrx3_t, mtrx3_t> mtrx_lu(const mtrx3_t &m);
-tuple<mtrx4_t, mtrx4_t>	mtrx_lu(const mtrx4_t &m);
+
+template <typename mtrxT_t, int mrange>
+tuple<mtrxT_t, mtrxT_t> mtrx_lu(const mtrxT_t &m);
+
 tuple<mtrx3_t, vec3_t> mtrx_ldlt(const mtrx3_t &m);
-tuple<mtrx4_t, vec3_t>	mtrx_ldlt(const mtrx4_t &m);
+tuple<mtrx4_t, vec3_t> mtrx_ldlt(const mtrx4_t &m);
 mtrx3_t	mtrx_get_transpose(const mtrx3_t &m);
 mtrx4_t	mtrx_get_transpose(const mtrx4_t &m);
 void	mtrx_tranpose_self(mtrx3_t &m);

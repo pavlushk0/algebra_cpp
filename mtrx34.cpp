@@ -109,45 +109,26 @@ float mtrx_det(const mtrx3_t &m) {
 		   m[8]*m[3]*m[1];
 }
 
-mtrx3_t mtrx_mult(const mtrx3_t &a, const mtrx3_t &b) {
-	mtrx3_t rt;
-	float tmp;
+template <typename mtrxT_t, int mrange>
+mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b) {
+	mtrxT_t rt;
 	int32_t i, j, k;
-	constexpr int32_t mrange = 3;
-
+	float tmp;
+	
 	for (i = 0; i < mrange; i++) {
 		for (j = 0; j < mrange; j++) {
 			tmp = 0;
 			for (k = 0; k < mrange; k++) {
 				tmp = tmp + a[id_rw(k, j, mrange)]*b[id_rw(i, k, mrange)];
 			}
-			rt[id_rw(i, j, mrange)] = tmp;
+			rt[id_rw(i, j, mrange)] = tmp;	
 		}
 	}
 
 	return rt;
 }
-
-template <typename mtrxT_t>
-mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b) {
-	mtrxT_t rt;
-	int32_t i, j, k;
-	float tmp;
-	
-	for (i = 0; i < a.mrange; i++) {
-		for (j = 0; j < a.mrange; j++) {
-			tmp = 0;
-			for (k = 0; k < a.mrange; k++) {
-				tmp = tmp + a[id_rw(k, j, a.mrange)]*b[id_rw(i, k, b.mrange)];
-			}
-			rt[id_rw(i, j, rt.mrange)] = tmp;	
-		}
-	}
-
-	return rt;
-}
-template mtrx3_t mtrx_mult<mtrx3_t>(const mtrx3_t &a, const mtrx3_t &b);
-template mtrx4_t mtrx_mult<mtrx4_t>(const mtrx4_t &a, const mtrx4_t &b);
+template mtrx3_t mtrx_mult<mtrx3_t, 3>(const mtrx3_t &a, const mtrx3_t &b);
+template mtrx4_t mtrx_mult<mtrx4_t, 4>(const mtrx4_t &a, const mtrx4_t &b);
 
 vec3_t mtrx_mult_vec3(const mtrx3_t &m, const vec3_t &v) {
 	vec3_t rt;
@@ -210,12 +191,13 @@ func mtrx3_lu(m mtrx3_t) (l, u mtrx3_t) {
 /*
 	Нижнетреугольная (L, lm) матрица имеет единицы по диагонали
 */
-tuple<mtrx3_t, mtrx3_t> mtrx_lu(const mtrx3_t &m) {
-	mtrx3_t lm, um;
+
+template <typename mtrxT_t, int mrange>
+tuple<mtrxT_t, mtrxT_t> mtrx_lu(const mtrxT_t &m) {
+	mtrxT_t lm, um;
 	int32_t	i, j, k; 
 	float sum;
-	constexpr int32_t mrange = 3;
-
+	
 	for (i = 0; i < mrange; i++) {
 		for (k = i; k < mrange; k++) {
 			sum = 0;
@@ -240,37 +222,8 @@ tuple<mtrx3_t, mtrx3_t> mtrx_lu(const mtrx3_t &m) {
 
 	return {lm, um};
 }
-
-tuple<mtrx4_t, mtrx4_t> mtrx_lu(const mtrx4_t &m) {
-	mtrx4_t lm, um;
-    int32_t	i, j, k; 
-	float sum = 0;
-	constexpr int32_t mrange = 4;
-
-	for (i = 0; i < mrange; i++) {
-		for (k = i; k < mrange; k++) {
-			sum = 0;
-			for (j = 0; j < i; j++) {
-				sum += (lm[id_rw(i, j, mrange)] * um[id_rw(j, k, mrange)]);
-			}
-			um[id_rw(i, k, mrange)] = m[id_rw(i, k, mrange)] - sum;
-		}
-
-		for (k = i; k < mrange; k++) {
-			if (i == k) {
-				lm[id_rw(i, i, mrange)] = 1.0;
-			} else {
-				sum = 0;
-				for (j = 0; j < i; j++) {
-					sum += lm[id_rw(k, j, mrange)] * um[id_rw(j, i, mrange)];
-				}
-				lm[id_rw(k, i, mrange)] = (m[id_rw(k, i, mrange)] - sum) / um[id_rw(i, i, mrange)];
-			}
-		}
-	}
-
-	return {lm, um};
-}
+template tuple<mtrx3_t, mtrx3_t> mtrx_lu<mtrx3_t, 3>(const mtrx3_t &m);
+template tuple<mtrx4_t, mtrx4_t> mtrx_lu<mtrx4_t, 4>(const mtrx4_t &m);
 
 tuple<mtrx3_t, vec3_t> mtrx_ldlt(const mtrx3_t &m) {
 	mtrx3_t lm;
