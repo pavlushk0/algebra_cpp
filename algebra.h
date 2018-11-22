@@ -1,11 +1,11 @@
 #pragma once
 
-#include <array>
 #include <tuple>
 
 using namespace std;
 
 enum {_XC, _YC, _ZC, _WC};
+enum mtrx_type {MTRX_IDTT, MTRX_ZERO};
 
 class vec3_t {
 	public:
@@ -34,6 +34,8 @@ class vec3_t {
 
 class mtrx3_t {
 	public:
+		int mrange = 3;
+
 		float operator[](const int32_t id) const {
 			return data[id];
 		};
@@ -46,6 +48,13 @@ class mtrx3_t {
 			data{1.0f, 0.0f, 0.0f,
 				 0.0f, 1.0f, 0.0f,
 				 0.0f, 0.0f, 1.0f} {};
+
+		mtrx3_t(float a00, float a01, float a02,
+                float a10, float a11, float a12,
+                float a20, float a21, float a22):
+			data{a00, a01, a02,
+                 a10, a11, a12,
+                 a20, a21, a22} {};
 
 		mtrx3_t(const mtrx3_t &m):
 			data{m[0], m[1], m[2],
@@ -85,6 +94,8 @@ class qtnn_t {
 
 class mtrx4_t {
 	public:
+		int mrange = 4;
+
 		float operator[](const int32_t id) const {
 			return data[id];
 		};
@@ -98,6 +109,15 @@ class mtrx4_t {
 				 0.0f, 1.0f, 0.0f, 0.0f,
 				 0.0f, 0.0f, 1.0f, 0.0f,
 				 0.0f, 0.0f, 0.0f, 1.0f} {};
+
+		mtrx4_t(float a00, float a01, float a02, float a03,
+                float a10, float a11, float a12, float a13,
+                float a20, float a21, float a22, float a23,
+                float a30, float a31, float a32, float a33):
+			data {a00, a01, a02, a03,
+                  a10, a11, a12, a13,
+                  a20, a21, a22, a23,
+                  a30, a31, a32, a33} {};
 
 		mtrx4_t(const mtrx4_t &m):
 			data{m[0],  m[1],  m[2],  m[3], 
@@ -135,15 +155,6 @@ class vec4_t {
 	private:
 		float data[4];
 };
-/*
-	Redefinition by std::array
-
-typedef array<float, 3> vec3_t;
-typedef array<float, 9> mtrx3_t;
-typedef array<float, 16> mtrx4_t;
-typedef array<float, 4> qtnn_t;
-typedef array<float, 4> vec4_t;
-*/
 
 const float f_eps = 0.00001f;
 
@@ -180,23 +191,29 @@ vec3_t	vec3_sum(const vec3_t &a, const vec3_t &b);
 vec3_t	vec3_sub(const vec3_t &a, const vec3_t &b);
 vec3_t  vec3_cross(const vec3_t &a, const vec3_t &b);
 
-mtrx3_t	mtrx3_copy(const mtrx3_t &m);
-mtrx3_t mtrx3_zero();
-mtrx3_t mtrx3_set(float a00, float a01, float a02,
-                  float a10, float a11, float a12,
-                  float a20, float a21, float a22);
-mtrx3_t mtrx3_set_euler(const float yaw, const float pitch, const float roll);
-mtrx3_t mtrx3_set_axisangl(const vec3_t &ax, const float phi);
-void	mtrx3_show(const mtrx3_t &m);
-mtrx3_t mtrx3_idtt();
-float	mtrx3_det(const mtrx3_t &m);
-mtrx3_t mtrx3_mult(const mtrx3_t &a, const mtrx3_t &b);
-vec3_t	mtrx3_mult_vec3(const mtrx3_t &m, const vec3_t &v);
-tuple<mtrx3_t, mtrx3_t> mtrx3_lu(const mtrx3_t &m);
-tuple<mtrx3_t, vec3_t> mtrx3_ldlt(const mtrx3_t &m);
-mtrx3_t	mtrx3_get_transpose(const mtrx3_t &m);
-void	mtrx3_tranpose_self(mtrx3_t &m);
-mtrx3_t	mtrx3_get_inv(const mtrx3_t &m);
+mtrx3_t	mtrx_copy(const mtrx3_t &m);
+mtrx4_t	mtrx_copy(const mtrx4_t &m);
+mtrx3_t mtrx_set_euler(const float yaw, const float pitch, const float roll);
+mtrx3_t mtrx_set_axisangl(const vec3_t &ax, const float phi);
+void	mtrx_show(const mtrx3_t &m);
+void	mtrx_show(const mtrx4_t &m);
+float	mtrx_det(const mtrx3_t &m);
+
+template <typename mtrxT_t>
+mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b);
+
+vec3_t	mtrx_mult_vec3(const mtrx3_t &m, const vec3_t &v);
+tuple<mtrx3_t, mtrx3_t> mtrx_lu(const mtrx3_t &m);
+tuple<mtrx4_t, mtrx4_t>	mtrx_lu(const mtrx4_t &m);
+tuple<mtrx3_t, vec3_t> mtrx_ldlt(const mtrx3_t &m);
+tuple<mtrx4_t, vec3_t>	mtrx_ldlt(const mtrx4_t &m);
+mtrx3_t	mtrx_get_transpose(const mtrx3_t &m);
+mtrx4_t	mtrx_get_transpose(const mtrx4_t &m);
+void	mtrx_tranpose_self(mtrx3_t &m);
+void	mtrx_tranpose_self(mtrx4_t &m);
+mtrx3_t	mtrx_get_inv(const mtrx3_t &m);
+mtrx4_t mtrx_get_inv(const mtrx4_t &m);
+mtrx4_t mtrx_get_inv_gauss(const mtrx4_t &m); //empty
 
 qtnn_t  qtnn_zero();
 qtnn_t  qtnn_copy(const qtnn_t &q);    
@@ -217,18 +234,3 @@ qtnn_t  qtnn_from_axisangl(const vec3_t &a, float phi);
 qtnn_t	qtnn_from_euler(float yaw, float pitch, float roll); 
 vec3_t  qtnn_to_vec3(const qtnn_t &q);
 vec3_t  qtnn_transform_vec3(const qtnn_t &a, const vec3_t &b);
-
-mtrx4_t	mtrx4_copy(const mtrx4_t &m);
-mtrx4_t mtrx4_zero();
-mtrx4_t mtrx4_set(float a00, float a01, float a02, float a03,
-                  float a10, float a11, float a12, float a13,
-                  float a20, float a21, float a22, float a23,
-                  float a30, float a31, float a32, float a33);
-void	mtrx4_show(const mtrx4_t &m);
-mtrx4_t	mtrx4_idtt();
-tuple<mtrx4_t, mtrx4_t>	mtrx4_lu(const mtrx4_t &m);
-tuple<mtrx4_t, vec3_t>	mtrx4_ldlt(const mtrx4_t &m);
-mtrx4_t	mtrx4_get_transpose(const mtrx4_t &m);
-void	mtrx4_tranpose_self(mtrx4_t &m);
-mtrx4_t mtrx4_get_inv(const mtrx4_t &m);
-mtrx4_t mtrx4_get_inv_gauss(const mtrx4_t &m); //empty

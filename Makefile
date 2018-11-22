@@ -1,23 +1,21 @@
 
-CPP      := g++
-CC		 := gcc
-CPPFLAGS := -Wall -std=c++17 
-CFLAGS	 := -Wall -std=c11
-CPPLIBS  := -lstdc++
-CLIBS    :=	-lc -lm
+CC       := g++
+FLAGS    := -Wall -std=c++17 
+LIBS 	 := -lstdc++
 RM       := rm -f
 
-SRCS := $(wildcard *.cpp)
+SRCS := mtrx34.cpp test.cpp vec3.cpp
 OBJS := $(SRCS:.cpp=.o)
 
 $(info COMMON MAKEFILE)
 
-dummy:
-	$(info no make target)
+all: compile link 
 
-cpp_version:
-	$(info CPP_VERSION file compile)
-	$(CPP) $(CPPFLAGS) test.cpp vec3.cpp mtrx3.cpp mtrx4.cpp -o main $(CPPLIBS)
+compile:
+	$(CC) $(FLAGS) -c mtrx34.cpp test.cpp vec3.cpp
+
+link:
+	$(CC) $(OBJS) -o main $(LIBS)
 
 clean:
 	$(RM) *.o

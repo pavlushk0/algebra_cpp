@@ -7,28 +7,29 @@
 #include "algebra.h"
 
 int main(int argc, char *argv[]) {
-	mtrx3_t m, lm, um, mm;
+	mtrx4_t m, lm, um, mm;
 
-	m = mtrx3_set(-10.0, 1.0, 5.0,
-				   2.0, 7.0, 4.0,
-			      -8.0, 4.0, 1.0);
+	m = mtrx4_t(-10.0f, 1.0f, 5.0f, 1,
+				  2.0f, 7.0f, 4.0f, 1,
+			     -8.0f, 4.0f, 1.0f, 1,
+				 3, 4, 5, 6);
 
-	mtrx3_show(m);
+	mtrx_show(m);
 	printf("\n");
 
-	auto ret = mtrx3_lu(m);
+	auto ret = mtrx_lu(m);
 
 	lm = std::get<0>(ret);
-	mtrx3_show(lm);
+	mtrx_show(lm);
 	printf("\n");
 
 	um = std::get<1>(ret);
-	mtrx3_show(um);
+	mtrx_show(um);
 	printf("\n");
 
-	mm = mtrx3_mult(um, lm);
+	mm = mtrx_mult(um, lm);
 
-	mtrx3_show(mm);
+	mtrx_show(mm);
 	printf("\n");
 
 	return 0;
