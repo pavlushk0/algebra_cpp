@@ -7,16 +7,16 @@
 qtnn_t qtnn_zero() {
 	qtnn_t rt;
 
-	q[0] = 0.0f;
-	q[1] = 0.0f;
-	q[2] = 0.0f;
-	q[3] = 0.0f;
+	rt[0] = 0.0f;
+	rt[1] = 0.0f;
+	rt[2] = 0.0f;
+	rt[3] = 0.0f;
 
 	return rt;
 }
 
 qtnn_t qtnn_copy(const qtnn_t &q) {
-	qtrn_t rt;
+	qtnn_t rt;
 
 	rt[0] = q[0];
 	rt[1] = q[1];
@@ -30,7 +30,7 @@ void qtnn_show(const qtnn_t &q) {
 	printf("%5.2f %5.2f %5.2f %5.2f\n", q[_XC], q[_YC], q[_ZC], q[_WC]);
 }
 
-float qtnn_lenght(const qtnn_t q) {
+float qtnn_lenght(const qtnn_t &q) {
 	return sqrtf(q[_XC]*q[_XC] +
 				 q[_YC]*q[_YC] +
 				 q[_ZC]*q[_ZC] +
@@ -56,7 +56,7 @@ void qtnn_normalize_self(qtnn_t &q) {
 qtnn_t qtnn_get_normalize(const qtnn_t &q) {
 	qtnn_t rt;
 	
-	qtnn_copy(q, rt);
+	rt = qtnn_copy(q);
 
 	qtnn_normalize_self(rt);
 

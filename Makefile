@@ -4,7 +4,7 @@ FLAGS    := -Wall -std=c++17
 LIBS 	 := -lstdc++
 RM       := rm -f
 
-SRCS := mtrx34.cpp test.cpp vec3.cpp
+SRCS := test.cpp mtrx34.cpp vec234.cpp
 OBJS := $(SRCS:.cpp=.o)
 
 $(info COMMON MAKEFILE)
@@ -12,7 +12,7 @@ $(info COMMON MAKEFILE)
 all: compile link 
 
 compile:
-	$(CC) $(FLAGS) -c mtrx34.cpp test.cpp vec3.cpp
+	$(CC) $(FLAGS) -c $(SRCS)
 
 link:
 	$(CC) $(OBJS) -o main $(LIBS)

@@ -6,34 +6,6 @@
 
 using namespace std;
 
-mtrx3_t	mtrx_copy(const mtrx3_t &m) {
-	mtrx3_t rt;
-	int32_t i, j;
-	constexpr int mrange = 3;
-
-	for (i = 0; i < mrange; i++) {
-		for (j = 0; j < mrange; j++) {
-			rt[id_rw(i, j, mrange)] = m[id_rw(i, j, mrange)];
-		}
-	}
-
-	return rt;
-}
-
-mtrx4_t mtrx_copy(const mtrx4_t &m) {
-    mtrx4_t rt;
-	int32_t i, j;
-	constexpr int32_t mrange = 4;
-
-	for (i = 0; i < mrange; i++) {
-		for (j = 0; j < mrange; j++) {
-			rt[id_rw(i, j, mrange)] = m[id_rw(i, j, mrange)];
-		}
-	}
-
-	return rt;
-}
-
 mtrx3_t mtrx_set_euler(float yaw, float pitch, float roll) {
 	mtrx3_t rt;
 	float cosy, siny, cosp, sinp, cosr, sinr;
@@ -225,13 +197,14 @@ tuple<mtrxT_t, mtrxT_t> mtrx_lu(const mtrxT_t &m) {
 template tuple<mtrx3_t, mtrx3_t> mtrx_lu<mtrx3_t, 3>(const mtrx3_t &m);
 template tuple<mtrx4_t, mtrx4_t> mtrx_lu<mtrx4_t, 4>(const mtrx4_t &m);
 
-tuple<mtrx3_t, vec3_t> mtrx_ldlt(const mtrx3_t &m) {
-	mtrx3_t lm;
-	vec3_t dv;
+
+template <typename mtrxT_t, typename vecT_t, int mrange>
+tuple<mtrxT_t, vecT_t> mtrx_ldlt(const mtrxT_t &m) {
+	mtrxT_t lm;
+	vecT_t dv;
 	int32_t	i, j, k; 
 	float sum;
-	constexpr int32_t mrange = 3;
-
+	
 	for (i = 0; i < mrange; i++) {
 		for (j = i; j < mrange; j++) {
 			sum = m[id_rw(j, i, mrange)];
@@ -239,8 +212,8 @@ tuple<mtrx3_t, vec3_t> mtrx_ldlt(const mtrx3_t &m) {
 				sum = sum - lm[id_rw(i, k, mrange)]*dv[k]*lm[id_rw(j, k, mrange)];
 				if (i == j) {
 					if (sum <= 0) {
-						cout << "mtrx3_ldlt(): matrix is not positive definite \n" ;
-						return {mtrx3_t(), vec3_t()};
+						cout << "mtrx_ldlt(): matrix is not positive definite \n" ;
+						return {mtrxT_t(), vecT_t()};
 					}
 					dv[i] = sum;
 					lm[id_rw(i, i, mrange)] = 1.0;
@@ -253,42 +226,15 @@ tuple<mtrx3_t, vec3_t> mtrx_ldlt(const mtrx3_t &m) {
 
 	return {lm, dv};
 }
+template tuple<mtrx3_t, vec3_t> mtrx_ldlt<mtrx3_t, vec3_t, 3>(const mtrx3_t &m);
+template tuple<mtrx4_t, vec4_t> mtrx_ldlt<mtrx4_t, vec4_t, 4>(const mtrx4_t &m);
 
-tuple<mtrx4_t, vec3_t> mtrx_ldlt(const mtrx4_t &m) {
-	mtrx4_t lm;
-	vec3_t dv;
-    int32_t	i, j, k; 
-	float sum;
-	constexpr int32_t mrange = 4;
-
-	for (i = 0; i < mrange; i++) {
-		for (j = i; j < mrange; j++) {
-			sum = m[id_rw(j, i, mrange)];
-			for (k = 0; k < i; k++) {
-				sum = sum - lm[id_rw(i, k, mrange)]*dv[k]*lm[id_rw(j, k, mrange)];
-				if (i == j) {
-					if (sum <= 0) {
-						cout << "mtrx4_ldlt(): matrix is not positive definite \n" ;
-						return {mtrx4_t(), vec3_t()};
-					}
-					dv[i] = sum;
-					lm[id_rw(i, i, mrange)] = 1.0;
-				} else {
-					lm[id_rw(j, i, mrange)] = sum / dv[i];
-				}
-			}
-		}
-	}
-
-	return {lm, dv};
-}
-
-mtrx3_t mtrx_get_transpose(const mtrx3_t &m) {
-	mtrx3_t rt;
+template <typename mtrxT_t, int mrange>
+mtrxT_t	mtrx_get_transpose(const mtrxT_t &m) {
+	mtrxT_t rt;
 	int32_t i, j;
 	float tmp;
-	constexpr int32_t mrange = 3;
-
+	
 	rt = m;
 
 	for (i = 0; i < mrange; i++) {
@@ -301,53 +247,8 @@ mtrx3_t mtrx_get_transpose(const mtrx3_t &m) {
 
 	return rt;
 }
-
-mtrx4_t mtrx_get_transpose(const mtrx4_t &m) {
-	mtrx4_t rt;
-    int32_t i, j;
-	float tmp;
-	constexpr int32_t mrange = 4;
-
-	rt = mtrx_copy(m);
-
-	for (i = 0; i < mrange; i++) {
-		for (j = 0; j < i; j++) {
-			tmp = rt[id_rw(i, i, mrange)];
-			rt[id_rw(i, j, mrange)] = rt[id_rw(j, i, mrange)];
-			rt[id_rw(j, i, mrange)] = tmp;
-		}
-	}
-
-	return rt;
-}
-
-void mtrx_tranpose_self(mtrx3_t &m) {
-	int32_t i, j;
-	float tmp;
-	constexpr int32_t mrange = 3;
-
-	for (i = 0; i < mrange; i++) {
-		for (j = 0; j < i; j++) {
-			tmp = m[id_rw(i, i, mrange)];
-			m[id_rw(i, j, mrange)] = m[id_rw(j, i, mrange)];
-			m[id_rw(j, i, mrange)] = tmp;
-		}
-	}
-}
-
-void mtrx_tranpose_self(mtrx4_t &m) {
-    int32_t i, j;
-	float tmp;
-	constexpr int32_t mrange = 4;
-
-	for (i = 0; i < mrange; i++) {
-		for (j = 0; j < i; j++) {
-			tmp = m[id_rw(i, i, mrange)];
-			m[id_rw(i, j, mrange)] = m[id_rw(j, i, mrange)];
-			m[id_rw(j, i, mrange)] = tmp;
-		}
-	}
-}
+template mtrx3_t mtrx_get_transpose<mtrx3_t, 3>(const mtrx3_t &m);
+template mtrx4_t mtrx_get_transpose<mtrx4_t, 4>(const mtrx4_t &m);
 
 mtrx3_t	mtrx_get_inv(const mtrx3_t &m) {
 	mtrx3_t inverse, rt;

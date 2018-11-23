@@ -7,6 +7,38 @@ using namespace std;
 enum {_XC, _YC, _ZC, _WC};
 enum mtrx_type {MTRX_IDTT, MTRX_ZERO};
 
+class vec2_t {
+	public:
+		float operator[](const int32_t id) const {
+			return data[id];
+		};
+
+		float &operator[](const int32_t id) {
+			return data[id];
+		};
+
+		vec2_t &operator=(const vec2_t &v) {
+			data[_XC] = v[_XC];
+			data[_YC] = v[_YC];
+
+			return (*this);
+		};
+
+		vec2_t(): 
+			data{0.0, 0.0} {};
+		
+		vec2_t(const float x, const float y): 
+			data{x, y} {};
+		
+		vec2_t(const vec2_t &v): 
+			data{v[_XC], v[_YC]} {};
+
+		~vec2_t() {};
+	
+	private:
+		float data[2];
+};
+
 class vec3_t {
 	public:
 		float operator[](const int32_t id) const {
@@ -15,6 +47,14 @@ class vec3_t {
 
 		float &operator[](const int32_t id) {
 			return data[id];
+		};
+
+		vec3_t &operator=(const vec3_t &v) {
+			data[_XC] = v[_XC];
+			data[_YC] = v[_YC];
+			data[_ZC] = v[_ZC];
+
+			return (*this);
 		};
 
 		vec3_t(): 
@@ -32,16 +72,57 @@ class vec3_t {
 		float data[3];
 };
 
-class mtrx3_t {
+class vec4_t {
 	public:
-		int mrange = 3;
-
 		float operator[](const int32_t id) const {
 			return data[id];
 		};
 
 		float &operator[](const int32_t id) {
 			return data[id];
+		};
+
+		vec4_t &operator=(const vec4_t &v) {
+			data[_XC] = v[_XC];
+			data[_YC] = v[_YC];
+			data[_ZC] = v[_ZC];
+			data[_WC] = v[_WC];
+
+			return (*this);
+		};
+
+		vec4_t(): 
+			data{0.0, 0.0, 0.0, 0.0} {};
+		
+		vec4_t(const float x, const float y, const float z, const float w): 
+			data{x, y, z, w} {};
+		
+		vec4_t(const vec4_t &v): 
+			data{v[_XC], v[_YC], v[_ZC], v[_WC]} {};
+
+		~vec4_t() {};
+	
+	private:
+		float data[4];
+};
+
+
+class mtrx3_t {
+	public:
+		float operator[](const int32_t id) const {
+			return data[id];
+		};
+
+		float &operator[](const int32_t id) {
+			return data[id];
+		};
+
+		mtrx3_t &operator=(const mtrx3_t &m) {
+			for (int i = 0; i < 9; i++) {
+				data[i] = m[i];
+			}
+			
+			return (*this);
 		};
 
 		mtrx3_t(): 
@@ -67,31 +148,6 @@ class mtrx3_t {
 		float data[9];
 };
 
-class qtnn_t {
-	public:
-		float operator[](const int32_t id) const {
-			return data[id];
-		};
-
-		float &operator[](const int32_t id) {
-			return data[id];
-		};
-
-		qtnn_t(): 
-			data{0.0, 0.0, 0.0} {};
-		
-		qtnn_t(const float x, const float y, const float z, const float w): 
-			data{x, y, z, w} {};
-		
-		qtnn_t(const qtnn_t &q): 
-			data{q[_XC], q[_YC], q[_ZC], q[_WC]} {};
-
-		~qtnn_t () {};
-	
-	private:
-		float data[4];
-};
-
 class mtrx4_t {
 	public:
 		float operator[](const int32_t id) const {
@@ -100,6 +156,14 @@ class mtrx4_t {
 
 		float &operator[](const int32_t id) {
 			return data[id];
+		};
+
+		mtrx4_t &operator=(const mtrx4_t &m) {
+			for (int i = 0; i < 16; i++) {
+				data[i] = m[i];
+			}
+			
+			return (*this);
 		};
 
 		mtrx4_t(): 
@@ -129,7 +193,7 @@ class mtrx4_t {
 		float data[16];
 };
 
-class vec4_t {
+class qtnn_t {
 	public:
 		float operator[](const int32_t id) const {
 			return data[id];
@@ -139,16 +203,25 @@ class vec4_t {
 			return data[id];
 		};
 
-		vec4_t(): 
+		qtnn_t &operator=(const qtnn_t &q) {
+			data[_XC] = q[_XC];
+			data[_YC] = q[_YC];
+			data[_ZC] = q[_ZC];
+			data[_WC] = q[_WC];
+
+			return (*this);
+		};
+
+		qtnn_t(): 
 			data{0.0, 0.0, 0.0, 0.0} {};
 		
-		vec4_t(const float x, const float y, const float z, const float w): 
+		qtnn_t(const float x, const float y, const float z, const float w): 
 			data{x, y, z, w} {};
 		
-		vec4_t(const vec4_t &v): 
-			data{v[_XC], v[_YC], v[_ZC], v[_WC]} {};
+		qtnn_t(const qtnn_t &q): 
+			data{q[_XC], q[_YC], q[_ZC], q[_WC]} {};
 
-		~vec4_t() {};
+		~qtnn_t () {};
 	
 	private:
 		float data[4];
@@ -174,23 +247,18 @@ constexpr int32_t id_cw(int32_t i, int32_t j, int32_t n) {
 	return (j*n + i);
 };
 
-vec3_t  vec3_copy(const vec3_t &v);
-void 	vec3_show(const vec3_t &v);
-vec3_t  vec3_zero();
-vec3_t 	vec3_set(float x, float y, float z); 
-float 	vec3_lenght(const vec3_t &v);
-void 	vec3_normalize_self(vec3_t &v);
-vec3_t	vec3_get_normalize(const vec3_t &v);
-vec3_t	vec3_scale(const vec3_t &v,const float scale);
-void	vec3_invert_self(vec3_t &v);
-vec3_t	vec3_get_invert(const vec3_t v);
-float	vec3_dot(const vec3_t &a, const vec3_t &b);
-vec3_t	vec3_sum(const vec3_t &a, const vec3_t &b);
-vec3_t	vec3_sub(const vec3_t &a, const vec3_t &b);
-vec3_t  vec3_cross(const vec3_t &a, const vec3_t &b);
+void 	vec_show(const vec3_t &v);
+float 	vec_lenght(const vec3_t &v);
+void 	vec_normalize_self(vec3_t &v);
+vec3_t	vec_get_normalize(const vec3_t &v);
+vec3_t	vec_scale(const vec3_t &v,const float scale);
+void	vec_invert_self(vec3_t &v);
+vec3_t	vec_get_invert(const vec3_t v);
+float	vec_dot(const vec3_t &a, const vec3_t &b);
+vec3_t	vec_sum(const vec3_t &a, const vec3_t &b);
+vec3_t	vec_sub(const vec3_t &a, const vec3_t &b);
+vec3_t  vec_cross(const vec3_t &a, const vec3_t &b);
 
-mtrx3_t	mtrx_copy(const mtrx3_t &m);
-mtrx4_t	mtrx_copy(const mtrx4_t &m);
 mtrx3_t mtrx_set_euler(const float yaw, const float pitch, const float roll);
 mtrx3_t mtrx_set_axisangl(const vec3_t &ax, const float phi);
 void	mtrx_show(const mtrx3_t &m);
@@ -201,19 +269,19 @@ template <typename mtrxT_t, int mrange>
 mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b);
 
 vec3_t	mtrx_mult_vec3(const mtrx3_t &m, const vec3_t &v);
+//vec3_t	mtrx_mult_vec3(const mtrx4_t &m, const vec3_t &v);
 
 template <typename mtrxT_t, int mrange>
 tuple<mtrxT_t, mtrxT_t> mtrx_lu(const mtrxT_t &m);
 
-tuple<mtrx3_t, vec3_t> mtrx_ldlt(const mtrx3_t &m);
-tuple<mtrx4_t, vec3_t> mtrx_ldlt(const mtrx4_t &m);
-mtrx3_t	mtrx_get_transpose(const mtrx3_t &m);
-mtrx4_t	mtrx_get_transpose(const mtrx4_t &m);
-void	mtrx_tranpose_self(mtrx3_t &m);
-void	mtrx_tranpose_self(mtrx4_t &m);
+template <typename mtrxT_t, typename vecT_t, int mrange>
+tuple<mtrxT_t, vecT_t> mtrx_ldlt(const mtrxT_t &m);
+
+template <typename mtrxT_t, int mrange>
+mtrxT_t	mtrx_get_transpose(const mtrxT_t &m);
+
 mtrx3_t	mtrx_get_inv(const mtrx3_t &m);
 mtrx4_t mtrx_get_inv(const mtrx4_t &m);
-mtrx4_t mtrx_get_inv_gauss(const mtrx4_t &m); //empty
 
 qtnn_t  qtnn_zero();
 qtnn_t  qtnn_copy(const qtnn_t &q);    
