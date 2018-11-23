@@ -102,12 +102,31 @@ mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b) {
 template mtrx3_t mtrx_mult<mtrx3_t, 3>(const mtrx3_t &a, const mtrx3_t &b);
 template mtrx4_t mtrx_mult<mtrx4_t, 4>(const mtrx4_t &a, const mtrx4_t &b);
 
-vec3_t mtrx_mult_vec3(const mtrx3_t &m, const vec3_t &v) {
+template <typename mtrxT_t, typename vecT_t, int range>
+vecT_t	mtrx_mult_vec(const mtrxT_t &m, const vecT_t &v) {
+	vecT_t rt;
+	int32_t i, j;
+	float tmp;
+	
+	for (i = 0; i < range; i++) {
+		tmp = 0;
+		for (j = 0; j < range; j++) {
+			tmp = tmp + m[id_rw(i, j, range)]*v[i];	
+		}
+		rt[i] = tmp;
+	}
+
+	return rt;
+}
+template vec3_t mtrx_mult_vec<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v);
+template vec4_t mtrx_mult_vec<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v);
+
+vec3_t mtrx_mult_vec3(const mtrx4_t &m, const vec3_t &v) {
 	vec3_t rt;
 
-	rt[_XC] = m[0]*v[_XC] + m[1]*v[_YC] + m[2]*v[_ZC];
-	rt[_YC] = m[3]*v[_XC] + m[4]*v[_YC] + m[5]*v[_ZC];
-	rt[_ZC] = m[6]*v[_XC] + m[7]*v[_YC] + m[8]*v[_ZC];
+	rt[_XC] = m[0]*v[_XC] + m[1]*v[_YC] + m[2]* v[_ZC] + m[3];
+	rt[_YC] = m[4]*v[_XC] + m[5]*v[_YC] + m[6]* v[_ZC] + m[7];
+	rt[_ZC] = m[8]*v[_XC] + m[9]*v[_YC] + m[10]*v[_ZC] + m[11];
 
 	return rt;
 }
@@ -250,7 +269,7 @@ mtrxT_t	mtrx_get_transpose(const mtrxT_t &m) {
 template mtrx3_t mtrx_get_transpose<mtrx3_t, 3>(const mtrx3_t &m);
 template mtrx4_t mtrx_get_transpose<mtrx4_t, 4>(const mtrx4_t &m);
 
-mtrx3_t	mtrx_get_inv(const mtrx3_t &m) {
+mtrx3_t	mtrx_invert(const mtrx3_t &m) {
 	mtrx3_t inverse, rt;
 	float det, invDet;
 
@@ -289,7 +308,7 @@ mtrx3_t	mtrx_get_inv(const mtrx3_t &m) {
 	return rt;
 }
 
-mtrx4_t mtrx_get_inv(const mtrx4_t m) {
+mtrx4_t mtrx_invert(const mtrx4_t m) {
 	mtrx4_t rt;
  	float det;
     int i;

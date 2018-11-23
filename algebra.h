@@ -249,11 +249,9 @@ constexpr int32_t id_cw(int32_t i, int32_t j, int32_t n) {
 
 void 	vec_show(const vec3_t &v);
 float 	vec_lenght(const vec3_t &v);
-void 	vec_normalize_self(vec3_t &v);
-vec3_t	vec_get_normalize(const vec3_t &v);
+vec3_t 	vec_normalize(vec3_t &v);
 vec3_t	vec_scale(const vec3_t &v,const float scale);
-void	vec_invert_self(vec3_t &v);
-vec3_t	vec_get_invert(const vec3_t v);
+vec3_t	vec_invert(vec3_t &v);
 float	vec_dot(const vec3_t &a, const vec3_t &b);
 vec3_t	vec_sum(const vec3_t &a, const vec3_t &b);
 vec3_t	vec_sub(const vec3_t &a, const vec3_t &b);
@@ -268,8 +266,10 @@ float	mtrx_det(const mtrx3_t &m);
 template <typename mtrxT_t, int mrange>
 mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b);
 
-vec3_t	mtrx_mult_vec3(const mtrx3_t &m, const vec3_t &v);
-//vec3_t	mtrx_mult_vec3(const mtrx4_t &m, const vec3_t &v);
+template <typename mtrxT_t, typename vecT_t, int range>
+vecT_t	mtrx_mult_vec(const mtrxT_t &m, const vecT_t &v);
+
+vec3_t	mtrx4_mult_vec3(const mtrx4_t &m, const vec3_t &v);
 
 template <typename mtrxT_t, int mrange>
 tuple<mtrxT_t, mtrxT_t> mtrx_lu(const mtrxT_t &m);
@@ -280,8 +280,8 @@ tuple<mtrxT_t, vecT_t> mtrx_ldlt(const mtrxT_t &m);
 template <typename mtrxT_t, int mrange>
 mtrxT_t	mtrx_get_transpose(const mtrxT_t &m);
 
-mtrx3_t	mtrx_get_inv(const mtrx3_t &m);
-mtrx4_t mtrx_get_inv(const mtrx4_t &m);
+mtrx3_t	mtrx_invert(const mtrx3_t &m);
+mtrx4_t mtrx_invert(const mtrx4_t &m);
 
 qtnn_t  qtnn_zero();
 qtnn_t  qtnn_copy(const qtnn_t &q);    

@@ -16,22 +16,17 @@ float vec_lenght(vec3_t &v) {
 
 }
 
-void vec_normalize_self(vec3_t &v) {
+vec3_t vec_normalize(vec3_t &v) {
+	vec3_t rt;
 	float len;
 
 	len = vec_lenght(v);
 
 	if (len != 0.0) {
-		v[_ZC] = v[_ZC] / len;
-		v[_XC] = v[_XC] / len;
-		v[_YC] = v[_YC] / len;
+		rt[_ZC] = v[_ZC] / len;
+		rt[_XC] = v[_XC] / len;
+		rt[_YC] = v[_YC] / len;
 	}
-}
-
-vec3_t vec_get_normalize(vec3_t &v) {
-	vec3_t rt = v;
-
-	vec_normalize_self(rt);
 
 	return rt;
 }
@@ -46,16 +41,12 @@ vec3_t vec_scale(vec3_t &v, float scale) {
 	return rt;
 }
 
-void vec_invert_self(vec3_t &v) {
-	v[_XC] = -v[_XC];
-	v[_YC] = -v[_YC];
-	v[_ZC] = -v[_ZC];
-}
+vec3_t vec_invert(vec3_t &v) {
+	vec3_t rt;
 
-vec3_t vec_get_invert(const vec3_t &v) {
-	vec3_t rt = vec3_t(v);
-
-	vec_invert_self(rt);
+	rt[_XC] = -v[_XC];
+	rt[_YC] = -v[_YC];
+	rt[_ZC] = -v[_ZC];
 
 	return rt;
 }
