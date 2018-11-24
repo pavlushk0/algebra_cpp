@@ -60,18 +60,17 @@ mtrx3_t mtrx_set_axisangl(vec3_t &ax, float phi) {
 	return rt;
 }
 
-void mtrx_show(const mtrx3_t &m) {
-	printf("%5.2f %5.2f %5.2f\n", m[0], m[1], m[2]);
-	printf("%5.2f %5.2f %5.2f\n", m[3], m[4], m[5]);
-	printf("%5.2f %5.2f %5.2f\n", m[6], m[7], m[8]);
+template <typename mtrxT_t, int mrange>
+void mtrx_show(const mtrxT_t &m) {
+	for (int i = 0; i < mrange; i++) {
+		for (int j = 0; j < mrange; j++) {
+			printf(" %5.2f", m[id_rw(i,j,mrange)]);
+		}
+		cout << "\n";
+	}
 }
-
-void mtrx_show(const mtrx4_t &m) {
-    printf("%5.2f %5.2f %5.2f %5.2f\n", m[0],  m[1],  m[2],  m[3]);
-	printf("%5.2f %5.2f %5.2f %5.2f\n", m[4],  m[5],  m[6],  m[7]);
-	printf("%5.2f %5.2f %5.2f %5.2f\n", m[8],  m[9],  m[10], m[11]);
-    printf("%5.2f %5.2f %5.2f %5.2f\n", m[11], m[12], m[13], m[15]);
-}
+template void mtrx_show<mtrx3_t, 3>(const mtrx3_t &m);
+template void mtrx_show<mtrx4_t, 4>(const mtrx4_t &m);
 
 float mtrx_det(const mtrx3_t &m) {
 	return m[0]*m[4]*m[8] +
@@ -249,7 +248,7 @@ template tuple<mtrx3_t, vec3_t> mtrx_ldlt<mtrx3_t, vec3_t, 3>(const mtrx3_t &m);
 template tuple<mtrx4_t, vec4_t> mtrx_ldlt<mtrx4_t, vec4_t, 4>(const mtrx4_t &m);
 
 template <typename mtrxT_t, int mrange>
-mtrxT_t	mtrx_get_transpose(const mtrxT_t &m) {
+mtrxT_t	mtrx_transpose(const mtrxT_t &m) {
 	mtrxT_t rt;
 	int32_t i, j;
 	float tmp;
@@ -266,8 +265,8 @@ mtrxT_t	mtrx_get_transpose(const mtrxT_t &m) {
 
 	return rt;
 }
-template mtrx3_t mtrx_get_transpose<mtrx3_t, 3>(const mtrx3_t &m);
-template mtrx4_t mtrx_get_transpose<mtrx4_t, 4>(const mtrx4_t &m);
+template mtrx3_t mtrx_transpose<mtrx3_t, 3>(const mtrx3_t &m);
+template mtrx4_t mtrx_transpose<mtrx4_t, 4>(const mtrx4_t &m);
 
 mtrx3_t	mtrx_invert(const mtrx3_t &m) {
 	mtrx3_t inverse, rt;

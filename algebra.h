@@ -247,21 +247,40 @@ constexpr int32_t id_cw(int32_t i, int32_t j, int32_t n) {
 	return (j*n + i);
 };
 
-void 	vec_show(const vec3_t &v);
-float 	vec_lenght(const vec3_t &v);
-vec3_t 	vec_normalize(vec3_t &v);
-vec3_t	vec_scale(const vec3_t &v,const float scale);
-vec3_t	vec_invert(vec3_t &v);
-float	vec_dot(const vec3_t &a, const vec3_t &b);
-vec3_t	vec_sum(const vec3_t &a, const vec3_t &b);
-vec3_t	vec_sub(const vec3_t &a, const vec3_t &b);
+template <typename vecT_t, int range>
+void 	vec_show(const vecT_t &v);
+
+template <typename vecT_t, int range>
+float 	vec_lenght(const vecT_t &v);
+
+template <typename vecT_t, int range>
+vecT_t 	vec_normalize(const vecT_t &v);
+
+template <typename vecT_t, int range>
+vecT_t	vec_scale(const vecT_t &v,const float scale);
+
+template <typename vecT_t, int range>
+vecT_t	vec_invert(const vecT_t &v);
+
+template <typename vecT_t, int range>
+float	vec_dot(const vecT_t &a, const vecT_t &b);
+
+template <typename vecT_t, int range>
+vecT_t	vec_sum(const vecT_t &a, const vecT_t &b);
+
+template <typename vecT_t, int range>
+vecT_t	vec_sub(const vecT_t &a, const vecT_t &b);
+
 vec3_t  vec_cross(const vec3_t &a, const vec3_t &b);
 
 mtrx3_t mtrx_set_euler(const float yaw, const float pitch, const float roll);
 mtrx3_t mtrx_set_axisangl(const vec3_t &ax, const float phi);
-void	mtrx_show(const mtrx3_t &m);
-void	mtrx_show(const mtrx4_t &m);
+
+template <typename mtrxT_t, int mrange>
+void mtrx_show(const mtrxT_t &m);
+
 float	mtrx_det(const mtrx3_t &m);
+//float	mtrx_det(const mtrx4_t &m);
 
 template <typename mtrxT_t, int mrange>
 mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b);
@@ -278,7 +297,7 @@ template <typename mtrxT_t, typename vecT_t, int mrange>
 tuple<mtrxT_t, vecT_t> mtrx_ldlt(const mtrxT_t &m);
 
 template <typename mtrxT_t, int mrange>
-mtrxT_t	mtrx_get_transpose(const mtrxT_t &m);
+mtrxT_t	mtrx_transpose(const mtrxT_t &m);
 
 mtrx3_t	mtrx_invert(const mtrx3_t &m);
 mtrx4_t mtrx_invert(const mtrx4_t &m);
