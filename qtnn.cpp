@@ -116,7 +116,7 @@ qtnn_t::qtnn_t(const vec3_t &ax, float phi) {
 	data[_ZC] = ax[_ZC] * sinhalfphi;
 
 }
-/*
+
 qtnn_t::qtnn_t(float yaw, float pitch, float roll) {
     qtnn_t	qyaw, qpitch, qroll, rt;
 	vec3_t  vyaw, vpitch, vroll;
@@ -138,7 +138,7 @@ qtnn_t::qtnn_t(float yaw, float pitch, float roll) {
 	data[_YC] = rt[_YC];
 	data[_ZC] = rt[_ZC];
 }
-*/
+
 vec3_t qtnn_to_vec3(const qtnn_t &q) {
 	return vec3_t(q[_XC], q[_YC], q[_ZC]);;
 }

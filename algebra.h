@@ -230,7 +230,7 @@ class qtnn_t {
 		qtnn_t(const qtnn_t &q): 
 			data{q[_XC], q[_YC], q[_ZC], q[_WC]} {};
 
-		//qtnn_t(float yaw, float pitch, float roll);
+		qtnn_t(float yaw, float pitch, float roll);
 		qtnn_t(const vec3_t &ax, float phi);
 		
 		~qtnn_t () {};
@@ -283,7 +283,9 @@ vecT_t	vec_sum(const vecT_t &a, const vecT_t &b);
 template <typename vecT_t, int range>
 vecT_t	vec_sub(const vecT_t &a, const vecT_t &b);
 
+//vec2_t	vec_cross(const vec2_t &a, const vec2_t &b);
 vec3_t  vec_cross(const vec3_t &a, const vec3_t &b);
+//vec4_t  vec_cross(const vec4_t &a, const vec4_t &b);
 
 template <typename mtrxT_t, int mrange>
 void mtrx_show(const mtrxT_t &m);
@@ -321,7 +323,5 @@ qtnn_t 	qtnn_sub(const qtnn_t &a, const qtnn_t &b);
 float   qtnn_dot(const qtnn_t &a, const qtnn_t &b);
 qtnn_t  qtnn_mult(const qtnn_t &a, const qtnn_t &b); 
 qtnn_t  qtnn_mult_vec3(const qtnn_t a, const qtnn_t &b);
-qtnn_t  qtnn_from_axisangl(const vec3_t &a, float phi); 
-qtnn_t	qtnn_from_euler(float yaw, float pitch, float roll); 
 vec3_t  qtnn_to_vec3(const qtnn_t &q);
 vec3_t  qtnn_transform_vec3(const qtnn_t &a, const vec3_t &b);
