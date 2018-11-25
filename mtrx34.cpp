@@ -6,8 +6,7 @@
 
 using namespace std;
 
-mtrx3_t mtrx_set_euler(float yaw, float pitch, float roll) {
-	mtrx3_t rt;
+mtrx3_t::mtrx3_t(float yaw, float pitch, float roll) {
 	float cosy, siny, cosp, sinp, cosr, sinr;
 	
 	cosy = cos(yaw);
@@ -17,23 +16,20 @@ mtrx3_t mtrx_set_euler(float yaw, float pitch, float roll) {
 	cosr = cos(roll);
 	sinr = sin(roll);
 
-	rt[0] = cosy*cosr - siny*cosp*sinr;
-	rt[1] = -cosy*sinr - siny*cosp*cosr;
-	rt[2] = siny * sinp;
+	data[0] = cosy*cosr - siny*cosp*sinr;
+	data[1] = -cosy*sinr - siny*cosp*cosr;
+	data[2] = siny * sinp;
 
-	rt[3] = siny*cosr + cosy*cosp*sinr;
-	rt[4] = -siny*sinr + cosy*cosp*cosr;
-	rt[5] = -cosy * sinp;
+	data[3] = siny*cosr + cosy*cosp*sinr;
+	data[4] = -siny*sinr + cosy*cosp*cosr;
+	data[5] = -cosy * sinp;
 
-	rt[6] = sinp * sinr;
-	rt[7] = sinp * cosr;
-	rt[8] = cosp;
-
-	return rt;
+	data[6] = sinp * sinr;
+	data[7] = sinp * cosr;
+	data[8] = cosp;
 }
 
-mtrx3_t mtrx_set_axisangl(vec3_t &ax, float phi) {
-	mtrx3_t rt;
+mtrx3_t::mtrx3_t(const vec3_t &ax, float phi) {
 	float cosphi, sinphi, vxvy, vxvz, vyvz, vx, vy, vz;
 
 	cosphi = cos(phi);
@@ -45,21 +41,27 @@ mtrx3_t mtrx_set_axisangl(vec3_t &ax, float phi) {
 	vy = ax[_YC];
 	vz = ax[_ZC];
 
-	rt[0] = cosphi + (1.0-cosphi)*vx*vx;
-	rt[1] = (1.0-cosphi)*vxvy - sinphi*vz;
-	rt[2] = (1.0-cosphi)*vxvz + sinphi*vy;
+	data[0] = cosphi + (1.0-cosphi)*vx*vx;
+	data[1] = (1.0-cosphi)*vxvy - sinphi*vz;
+	data[2] = (1.0-cosphi)*vxvz + sinphi*vy;
 
-	rt[3] = (1.0-cosphi)*vxvy + sinphi*vz;
-	rt[4] = cosphi + (1.0-cosphi)*vy*vy;
-	rt[5] = (1.0-cosphi)*vyvz - sinphi*vz;
+	data[3] = (1.0-cosphi)*vxvy + sinphi*vz;
+	data[4] = cosphi + (1.0-cosphi)*vy*vy;
+	data[5] = (1.0-cosphi)*vyvz - sinphi*vz;
 
-	rt[6] = (1.0-cosphi)*vxvz - sinphi*vy;
-	rt[7] = (1.0-cosphi)*vyvz + sinphi*vx;
-	rt[8] = cosphi + (1.0-cosphi)*vz*vz;
-
-	return rt;
+	data[6] = (1.0-cosphi)*vxvz - sinphi*vy;
+	data[7] = (1.0-cosphi)*vyvz + sinphi*vx;
+	data[8] = cosphi + (1.0-cosphi)*vz*vz;
 }
 
+mtrx4_t::mtrx4_t(float yaw, float pitch, float roll) {
+
+}
+
+mtrx4_t::mtrx4_t(const vec3_t &ax, float phi) {
+
+}
+		
 template <typename mtrxT_t, int mrange>
 void mtrx_show(const mtrxT_t &m) {
 	for (int i = 0; i < mrange; i++) {

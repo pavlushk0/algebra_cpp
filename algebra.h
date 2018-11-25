@@ -142,6 +142,9 @@ class mtrx3_t {
 				 m[3], m[4], m[5],
 				 m[6], m[7], m[8]} {};
 		
+		mtrx3_t(float yaw, float pitch, float roll);
+		mtrx3_t(const vec3_t &ax, float phi);
+		
 		~mtrx3_t() {};
 	
 	private:
@@ -187,6 +190,9 @@ class mtrx4_t {
 				 m[8],  m[9],  m[10], m[11],
 				 m[12], m[13], m[14], m[15]} {};
 		
+		mtrx4_t(float yaw, float pitch, float roll);
+		mtrx4_t(const vec3_t &ax, float phi);
+
 		~mtrx4_t() {};
 	
 	private:
@@ -217,6 +223,9 @@ class qtnn_t {
 		
 		qtnn_t(const float x, const float y, const float z, const float w): 
 			data{x, y, z, w} {};
+
+		qtnn_t(const vec3_t &v):
+			data{v[_XC], v[_YC], v[_ZC], 0.0} {};
 		
 		qtnn_t(const qtnn_t &q): 
 			data{q[_XC], q[_YC], q[_ZC], q[_WC]} {};
@@ -273,9 +282,6 @@ vecT_t	vec_sub(const vecT_t &a, const vecT_t &b);
 
 vec3_t  vec_cross(const vec3_t &a, const vec3_t &b);
 
-mtrx3_t mtrx_set_euler(const float yaw, const float pitch, const float roll);
-mtrx3_t mtrx_set_axisangl(const vec3_t &ax, const float phi);
-
 template <typename mtrxT_t, int mrange>
 void mtrx_show(const mtrxT_t &m);
 
@@ -302,21 +308,16 @@ mtrxT_t	mtrx_transpose(const mtrxT_t &m);
 mtrx3_t	mtrx_invert(const mtrx3_t &m);
 mtrx4_t mtrx_invert(const mtrx4_t &m);
 
-qtnn_t  qtnn_zero();
-qtnn_t  qtnn_copy(const qtnn_t &q);    
 void 	qtnn_show(const qtnn_t &q); 
 float	qtnn_lenght(const qtnn_t &q);
-void	qtnn_normalize_self(qtnn_t &q);
-qtnn_t	qtnn_get_normalize(const qtnn_t &q);
-void	qtnn_invert_self(qtnn_t &q);
-qtnn_t	qtnn_get_invert(const qtnn_t &q);
+qtnn_t	qtnn_normalize(const qtnn_t &q);
+qtnn_t	qtnn_invert(const qtnn_t &q);
 qtnn_t	qtnn_scale(const qtnn_t &q, float scale);
 qtnn_t	qtnn_sum(const qtnn_t &a, const qtnn_t &b);
 qtnn_t 	qtnn_sub(const qtnn_t &a, const qtnn_t &b);
 float   qtnn_dot(const qtnn_t &a, const qtnn_t &b);
 qtnn_t  qtnn_mult(const qtnn_t &a, const qtnn_t &b); 
 qtnn_t  qtnn_mult_vec3(const qtnn_t a, const qtnn_t &b);
-qtnn_t	qtnn_from_vec3(const vec3_t);
 qtnn_t  qtnn_from_axisangl(const vec3_t &a, float phi); 
 qtnn_t	qtnn_from_euler(float yaw, float pitch, float roll); 
 vec3_t  qtnn_to_vec3(const qtnn_t &q);

@@ -4,28 +4,6 @@
 #include <cmath>
 #include "algebra.h"
 
-qtnn_t qtnn_zero() {
-	qtnn_t rt;
-
-	rt[0] = 0.0f;
-	rt[1] = 0.0f;
-	rt[2] = 0.0f;
-	rt[3] = 0.0f;
-
-	return rt;
-}
-
-qtnn_t qtnn_copy(const qtnn_t &q) {
-	qtnn_t rt;
-
-	rt[0] = q[0];
-	rt[1] = q[1];
-	rt[2] = q[2];
-	rt[3] = q[3];
-
-	return rt;
-}
-
 void qtnn_show(const qtnn_t &q) {
 	printf("%5.2f %5.2f %5.2f %5.2f\n", q[_XC], q[_YC], q[_ZC], q[_WC]);
 }
@@ -37,47 +15,32 @@ float qtnn_lenght(const qtnn_t &q) {
 				 q[_WC]*q[_WC]);
 }
 
-void qtnn_normalize_self(qtnn_t &q) {
+qtnn_t qtnn_normalize(const qtnn_t &q) {
+	qtnn_t rt;
 	float len;
 
 	len = qtnn_lenght(q);
 
 	if (len > f_eps) {
-		q[_WC] = q[_WC] / len;
-		q[_XC] = q[_XC] / len;
-		q[_YC] = q[_YC] / len;
-		q[_ZC] = q[_ZC] / len;
+		rt[_WC] = q[_WC] / len;
+		rt[_XC] = q[_XC] / len;
+		rt[_YC] = q[_YC] / len;
+		rt[_ZC] = q[_ZC] / len;
 	} else {
 		printf("qtnn_normalize_self(): quaternion is too short!");
-		return;
+		return qtnn_t();
 	}
-}
-
-qtnn_t qtnn_get_normalize(const qtnn_t &q) {
-	qtnn_t rt;
-	
-	rt = qtnn_copy(q);
-
-	qtnn_normalize_self(rt);
 
 	return rt;
 }
 
-void qtnn_invert_self(qtnn_t &q) {
-	q[_WC] =  q[_WC];
-	q[_XC] = -q[_XC];
-	q[_YC] = -q[_YC];
-	q[_ZC] = -q[_ZC];
-
-	qtnn_normalize_self(q);
-}
-
-qtnn_t qtnn_get_invert(const qtnn_t &q) {
+qtnn_t qtnn_invert(const qtnn_t &q) {
 	qtnn_t rt;
 
-	qtnn_copy(q, rt);
-
-	qtnn_invert_self(rt);
+	rt[_WC] =  q[_WC];
+	rt[_XC] = -q[_XC];
+	rt[_YC] = -q[_YC];
+	rt[_ZC] = -q[_ZC];
 
 	return rt;
 }
@@ -142,66 +105,52 @@ qtnn_t qtnn_mult_vec3(const qtnn_t &a, const vec3_t &b) {
 	return rt;
 }
 
-qtnn_t qtnn_from_vec3(const vec3_t &v) {
-	qtnn_t rt;
-
-	rt[_XC] = v[_XC];
-	rt[_YC] = v[_YC];
-	rt[_ZC] = v[_ZC];
-	rt[_WC] = 0.0;
-
-	return rt;
-}
-
-qtnn_t qtnn_from_axisangl(const vec3_t &a, float phi) {
-	qtnn_t rt;
-	float sinhalfphi;
+qtnn_t::qtnn_t(const vec3_t &ax, float phi) {
+    float sinhalfphi;
 
 	sinhalfphi = sinf(phi * 0.5);
 
-	rt[_WC] = cosf(phi * 0.5);
-	rt[_XC] = a[_XC] * sinhalfphi;
-	rt[_YC] = a[_YC] * sinhalfphi;
-	rt[_ZC] = a[_ZC] * sinhalfphi;
+	data[_WC] = cosf(phi * 0.5);
+	data[_XC] = ax[_XC] * sinhalfphi;
+	data[_YC] = ax[_YC] * sinhalfphi;
+	data[_ZC] = ax[_ZC] * sinhalfphi;
 
-	return rt;
 }
-
-qtnn_t qtnn_from_euler(float yaw, float pitch, float roll) {
-	qtnn_t	qyaw, qpitch, qroll, rt;
+/*
+qtnn_t::qtnn_t(float yaw, float pitch, float roll) {
+    qtnn_t	qyaw, qpitch, qroll, rt;
 	vec3_t  vyaw, vpitch, vroll;
 
-	vec3_set(1.0, 0.0, 0.0, vyaw);
-	vec3_set(0.0, 1.0, 0.0, vpitch);
-	vec3_set(0.0, 0.0, 1.0, vroll);
+	vyaw   = vec3_t(1.0, 0.0, 0.0);
+	vpitch = vec3_t(0.0, 1.0, 0.0);
+	vroll  = vec3_t(0.0, 0.0, 1.0);
 
-	qyaw = qtnn_from_axisangl(vyaw, yaw);
-	qpitch = qtnn_from_axisangl(vpitch, pitch)
-	qroll = qtnn_from_axisangl(vroll, roll);
+	qyaw   = qtnn_t(vyaw, yaw);
+	qpitch = qtnn_t(vpitch, pitch);
+	qroll  = qtnn_t(vroll, roll);
 
 	rt = qtnn_mult(qyaw, qpitch);
 
 	rt = qtnn_mult(rt, qroll);
 
-	return rt;
+	data[_WC] = rt[_WC]; 
+	data[_XC] = rt[_XC];
+	data[_YC] = rt[_YC];
+	data[_ZC] = rt[_ZC];
 }
-
-qtnn_t qtnn_to_vec3(const qtnn_t &q) {
-	qtnn_t rt;
-
-	rt = vec3_set(q[_XC], q[_YC], q[_ZC]);
-
-	return rt;
+*/
+vec3_t qtnn_to_vec3(const qtnn_t &q) {
+	return vec3_t(q[_XC], q[_YC], q[_ZC]);;
 }
 
 vec3_t qtnn_transform_vec3(const qtnn_t &a, const vec3_t &b) {
 	vec3_t rt;
 	qtnn_t	vq, tmp, ia;
 
-	vq = qtnn_from_vec3(b);
+	vq = qtnn_t(b);
     tmp = qtnn_mult(a, vq);
-	ia = qtnn_get_invert(a);
-	rt = qtnn_mult(tmp, ia);
+	ia = qtnn_invert(a);
+	rt = qtnn_to_vec3(qtnn_mult(tmp, ia));
 
 	return rt;
 }
