@@ -230,6 +230,9 @@ class qtnn_t {
 		qtnn_t(const qtnn_t &q): 
 			data{q[_XC], q[_YC], q[_ZC], q[_WC]} {};
 
+		//qtnn_t(float yaw, float pitch, float roll);
+		qtnn_t(const vec3_t &ax, float phi);
+		
 		~qtnn_t () {};
 	
 	private:
