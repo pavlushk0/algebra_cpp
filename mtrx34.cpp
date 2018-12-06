@@ -127,8 +127,13 @@ void mtrx_show(const mtrxT_t &m) {
 		cout << "\n";
 	}
 }
+template void mtrx_show<mtrx2_t, 2>(const mtrx2_t &m);
 template void mtrx_show<mtrx3_t, 3>(const mtrx3_t &m);
 template void mtrx_show<mtrx4_t, 4>(const mtrx4_t &m);
+
+float mtrx_det(const mtrx2_t &m) {
+	return 1;
+}
 
 float mtrx_det(const mtrx3_t &m) {
 	return m[0]*m[4]*m[8] +
@@ -136,6 +141,10 @@ float mtrx_det(const mtrx3_t &m) {
 		   m[2]*m[3]*m[7] -
 		   m[0]*m[7]*m[5] -
 		   m[8]*m[3]*m[1];
+}
+
+float mtrx_det(const mtrx4_t &m) {
+	return 1;
 }
 
 template <typename mtrxT_t, int mrange>
@@ -156,6 +165,7 @@ mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b) {
 
 	return rt;
 }
+template mtrx2_t mtrx_mult<mtrx2_t, 2>(const mtrx2_t &a, const mtrx2_t &b);
 template mtrx3_t mtrx_mult<mtrx3_t, 3>(const mtrx3_t &a, const mtrx3_t &b);
 template mtrx4_t mtrx_mult<mtrx4_t, 4>(const mtrx4_t &a, const mtrx4_t &b);
 
@@ -175,6 +185,7 @@ vecT_t	mtrx_mult_vec(const mtrxT_t &m, const vecT_t &v) {
 
 	return rt;
 }
+template vec2_t mtrx_mult_vec<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t &v);
 template vec3_t mtrx_mult_vec<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v);
 template vec4_t mtrx_mult_vec<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v);
 
@@ -270,6 +281,7 @@ tuple<mtrxT_t, mtrxT_t> mtrx_lu(const mtrxT_t &m) {
 
 	return {lm, um};
 }
+template tuple<mtrx2_t, mtrx2_t> mtrx_lu<mtrx2_t, 2>(const mtrx2_t &m);
 template tuple<mtrx3_t, mtrx3_t> mtrx_lu<mtrx3_t, 3>(const mtrx3_t &m);
 template tuple<mtrx4_t, mtrx4_t> mtrx_lu<mtrx4_t, 4>(const mtrx4_t &m);
 
@@ -302,6 +314,7 @@ tuple<mtrxT_t, vecT_t> mtrx_ldlt(const mtrxT_t &m) {
 
 	return {lm, dv};
 }
+template tuple<mtrx2_t, vec2_t> mtrx_ldlt<mtrx2_t, vec2_t, 2>(const mtrx2_t &m);
 template tuple<mtrx3_t, vec3_t> mtrx_ldlt<mtrx3_t, vec3_t, 3>(const mtrx3_t &m);
 template tuple<mtrx4_t, vec4_t> mtrx_ldlt<mtrx4_t, vec4_t, 4>(const mtrx4_t &m);
 
@@ -323,8 +336,13 @@ mtrxT_t	mtrx_transpose(const mtrxT_t &m) {
 
 	return rt;
 }
+template mtrx2_t mtrx_transpose<mtrx2_t, 2>(const mtrx2_t &m);
 template mtrx3_t mtrx_transpose<mtrx3_t, 3>(const mtrx3_t &m);
 template mtrx4_t mtrx_transpose<mtrx4_t, 4>(const mtrx4_t &m);
+
+mtrx2_t	mtrx_invert(const mtrx2_t &m) {
+	return mtrx2_t();
+}
 
 mtrx3_t	mtrx_invert(const mtrx3_t &m) {
 	mtrx3_t inverse, rt;
@@ -496,8 +514,4 @@ mtrx4_t mtrx_invert(const mtrx4_t m) {
 	}
 
 	return rt;
-}
-
-mtrx4_t mtrx_get_inv_gauss(const mtrx4_t &m) {
-	return mtrx4_t();	
 }

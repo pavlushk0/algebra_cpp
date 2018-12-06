@@ -1,6 +1,6 @@
 
 CC       := g++
-FLAGS    := -Wall -std=c++17 
+FLAGS    := -Wall -std=c++17
 LIBS 	 := -lstdc++
 RM       := rm -f
 

@@ -106,6 +106,42 @@ class vec4_t {
 		float data[4];
 };
 
+class mtrx2_t {
+	public:
+		float operator[](const int32_t id) const {
+			return data[id];
+		};
+
+		float &operator[](const int32_t id) {
+			return data[id];
+		};
+
+		mtrx2_t &operator=(const mtrx2_t &m) {
+			for (int i = 0; i < 4; i++) {
+				data[i] = m[i];
+			}
+			
+			return (*this);
+		};
+
+		mtrx2_t(): 
+			data{1.0f, 0.0f,
+				 0.0f, 1.0f} {};
+
+		mtrx2_t(float a00, float a01,
+                float a10, float a11):
+			data{a00, a01,
+                 a10, a11} {};
+
+		mtrx2_t(const mtrx2_t &m):
+			data{m[0], m[1],
+				 m[2], m[3]} {};
+		
+		~mtrx2_t() {};
+	
+	private:
+		float data[4];
+};
 
 class mtrx3_t {
 	public:
@@ -283,15 +319,16 @@ vecT_t	vec_sum(const vecT_t &a, const vecT_t &b);
 template <typename vecT_t, int range>
 vecT_t	vec_sub(const vecT_t &a, const vecT_t &b);
 
-//vec2_t	vec_cross(const vec2_t &a, const vec2_t &b);
+vec2_t	vec_cross(const vec2_t &a, const vec2_t &b); //bad
 vec3_t  vec_cross(const vec3_t &a, const vec3_t &b);
-//vec4_t  vec_cross(const vec4_t &a, const vec4_t &b);
+vec4_t  vec_cross(const vec4_t &a, const vec4_t &b); //bad
 
 template <typename mtrxT_t, int mrange>
 void mtrx_show(const mtrxT_t &m);
 
+float	mtrx_det(const mtrx2_t); //bad
 float	mtrx_det(const mtrx3_t &m);
-//float	mtrx_det(const mtrx4_t &m);
+float	mtrx_det(const mtrx4_t &m); //bad
 
 template <typename mtrxT_t, int mrange>
 mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b);
@@ -310,6 +347,7 @@ tuple<mtrxT_t, vecT_t> mtrx_ldlt(const mtrxT_t &m);
 template <typename mtrxT_t, int mrange>
 mtrxT_t	mtrx_transpose(const mtrxT_t &m);
 
+mtrx2_t	mtrx_invert(const mtrx2_t &m); //bad
 mtrx3_t	mtrx_invert(const mtrx3_t &m);
 mtrx4_t mtrx_invert(const mtrx4_t &m);
 
