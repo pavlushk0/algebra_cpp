@@ -7,7 +7,13 @@
 using namespace std;
 
 mtrx2_t::mtrx2_t(float phi) {
+	float sinphi = sinf(phi);
+	float cosphi = cosf(phi);
 
+	data[0] = cosphi;
+	data[1] = -sinphi;
+	data[2] = -sinphi;
+	data[3] = cosphi;
 }
 
 mtrx3_t::mtrx3_t(float yaw, float pitch, float roll) {
@@ -193,7 +199,7 @@ template vec2_t mtrx_mult_vec<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t
 template vec3_t mtrx_mult_vec<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v);
 template vec4_t mtrx_mult_vec<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v);
 
-vec3_t mtrx_mult_vec3(const mtrx4_t &m, const vec3_t &v) {
+vec3_t mtrx_mult_vec(const mtrx4_t &m, const vec3_t &v) {
 	vec3_t rt;
 
 	rt[_XC] = m[0]*v[_XC] + m[1]*v[_YC] + m[2]* v[_ZC] + m[3];

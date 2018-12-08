@@ -137,7 +137,7 @@ class mtrx2_t {
 			data{m[0], m[1],
 				 m[2], m[3]} {};
 		
-		mtrx2_t(float phi); //bad
+		mtrx2_t(float phi);
 		
 		~mtrx2_t() {};
 	
@@ -337,8 +337,7 @@ mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b);
 
 template <typename mtrxT_t, typename vecT_t, int range>
 vecT_t	mtrx_mult_vec(const mtrxT_t &m, const vecT_t &v);
-
-vec3_t	mtrx4_mult_vec3(const mtrx4_t &m, const vec3_t &v);
+vec3_t	mtrx_mult_vec(const mtrx4_t &m, const vec3_t &v);
 
 template <typename mtrxT_t, int mrange>
 tuple<mtrxT_t, mtrxT_t> mtrx_lu(const mtrxT_t &m);
