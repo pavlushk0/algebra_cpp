@@ -137,6 +137,8 @@ class mtrx2_t {
 			data{m[0], m[1],
 				 m[2], m[3]} {};
 		
+		mtrx2_t(float phi); //bad
+		
 		~mtrx2_t() {};
 	
 	private:
@@ -326,7 +328,7 @@ vec4_t  vec_cross(const vec4_t &a, const vec4_t &b); //bad
 template <typename mtrxT_t, int mrange>
 void mtrx_show(const mtrxT_t &m);
 
-float	mtrx_det(const mtrx2_t); //bad
+float	mtrx_det(const mtrx2_t &m);
 float	mtrx_det(const mtrx3_t &m);
 float	mtrx_det(const mtrx4_t &m); //bad
 
@@ -347,7 +349,7 @@ tuple<mtrxT_t, vecT_t> mtrx_ldlt(const mtrxT_t &m);
 template <typename mtrxT_t, int mrange>
 mtrxT_t	mtrx_transpose(const mtrxT_t &m);
 
-mtrx2_t	mtrx_invert(const mtrx2_t &m); //bad
+mtrx2_t	mtrx_invert(const mtrx2_t &m);
 mtrx3_t	mtrx_invert(const mtrx3_t &m);
 mtrx4_t mtrx_invert(const mtrx4_t &m);
 

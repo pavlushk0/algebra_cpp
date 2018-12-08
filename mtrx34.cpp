@@ -132,7 +132,7 @@ template void mtrx_show<mtrx3_t, 3>(const mtrx3_t &m);
 template void mtrx_show<mtrx4_t, 4>(const mtrx4_t &m);
 
 float mtrx_det(const mtrx2_t &m) {
-	return 1;
+	return m[0]*m[3] - m[1]*m[2];
 }
 
 float mtrx_det(const mtrx3_t &m) {
@@ -341,7 +341,14 @@ template mtrx3_t mtrx_transpose<mtrx3_t, 3>(const mtrx3_t &m);
 template mtrx4_t mtrx_transpose<mtrx4_t, 4>(const mtrx4_t &m);
 
 mtrx2_t	mtrx_invert(const mtrx2_t &m) {
-	return mtrx2_t();
+	float det = mtrx_det(m);
+
+	if (fabs(det) < f_eps) {
+		cout << "mtrx_invert(): determinant is a zero!" << "\n";
+		return mtrx2_t();
+	}
+
+	return mtrx2_t(m[3], -m[1]/det, -m[2]/det, m[0]/det);
 }
 
 mtrx3_t	mtrx_invert(const mtrx3_t &m) {
@@ -356,6 +363,7 @@ mtrx3_t	mtrx_invert(const mtrx3_t &m) {
 		  m[2] * inverse[6];
 
 	if (fabs(det) < f_eps) {
+		cout << "mtrx_invert(): determinant is a zero!" << "\n";
 		return mtrx3_t();
 	}
 
