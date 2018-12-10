@@ -352,6 +352,9 @@ mtrx2_t	mtrx_invert(const mtrx2_t &m);
 mtrx3_t	mtrx_invert(const mtrx3_t &m);
 mtrx4_t mtrx_invert(const mtrx4_t &m);
 
+template <typename mtrxT_t, typename vecT_t, int mrange>
+vecT_t 	mtrx_solve_gauss(const mtrxT_t &m, const vecT_t &v);
+
 void 	qtnn_show(const qtnn_t &q); 
 float	qtnn_lenght(const qtnn_t &q);
 qtnn_t	qtnn_normalize(const qtnn_t &q);

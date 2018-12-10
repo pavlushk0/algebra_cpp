@@ -401,7 +401,7 @@ mtrx3_t	mtrx_invert(const mtrx3_t &m) {
 	return rt;
 }
 
-mtrx4_t mtrx_invert(const mtrx4_t m) {
+mtrx4_t mtrx_invert(const mtrx4_t &m) {
 	mtrx4_t rt;
  	float det;
     int i;
@@ -533,3 +533,54 @@ mtrx4_t mtrx_invert(const mtrx4_t m) {
 
 	return rt;
 }
+
+template <typename mtrxT_t, typename vecT_t, int mrange>
+vecT_t mtrx_solve_gauss(const mtrxT_t &m, const vecT_t &v) {
+	int i, j, k;
+	float temp, t;
+    mtrxT_t a;
+    vecT_t rt;
+     
+    for (i = 0; i < mrange; ++i) {
+        for (j = 0; j < mrange; ++j) {
+            a[id_rw(i, j, mrange)] = m[id_rw(i, j, mrange)];
+        	a[id_rw(i, mrange, mrange)] = v[i];
+		}
+    }
+    
+	for (i = 0; i < mrange; i++) {                    
+        for (k = i + 1; k < mrange; k++) {
+            if (abs(a[id_rw(i, i, mrange)]) < abs(a[id_rw(k, i, mrange)])) {
+                for (j = 0; j <= mrange; j++) {
+                    temp = a[id_rw(i, j, mrange)];
+                    a[id_rw(i, j, mrange)] = a[id_rw(k, j, mrange)];
+                    a[id_rw(k, j, mrange)] = temp;
+                }
+			}
+		}
+	}
+
+    for (i = 0; i < mrange-1; i++) {        
+        for (k = i + 1; k < mrange; k++) {
+            t = a[id_rw(k, i, mrange)] / a[id_rw(i, i, mrange)];
+            for ( j = 0; j <= mrange; j++) {
+                a[id_rw(k, j, mrange)]=a[id_rw(i, j, mrange)]-t*a[id_rw(i, j, mrange)];
+            }
+		}
+	}
+    
+    for (i = mrange-1; i >= 0; i--) {                            
+        rt[i] = a[id_rw(i, mrange, mrange)];                
+        for (j = i+1; j < mrange; j++) {
+            if (j != i) {                
+                rt[i] = rt[i] - a[id_rw(i, j, mrange)] * rt[j];
+			}
+        	rt[i] = rt[i] / a[id_rw(i, i, mrange)];
+		}            
+    }
+
+	return rt;
+}
+template vec2_t mtrx_solve_gauss<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t &v);
+template vec3_t mtrx_solve_gauss<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v);
+template vec4_t mtrx_solve_gauss<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v);
