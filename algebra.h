@@ -321,16 +321,19 @@ vecT_t	vec_sum(const vecT_t &a, const vecT_t &b);
 template <typename vecT_t, int range>
 vecT_t	vec_sub(const vecT_t &a, const vecT_t &b);
 
-vec2_t	vec_cross(const vec2_t &a, const vec2_t &b); //bad
+vec2_t	vec_cross(const vec2_t &a, const vec2_t &b); /* empty */
 vec3_t  vec_cross(const vec3_t &a, const vec3_t &b);
-vec4_t  vec_cross(const vec4_t &a, const vec4_t &b); //bad
+vec4_t  vec_cross(const vec4_t &a, const vec4_t &b); /* empty */
 
 template <typename mtrxT_t, int mrange>
 void mtrx_show(const mtrxT_t &m);
 
 float	mtrx_det(const mtrx2_t &m);
 float	mtrx_det(const mtrx3_t &m);
-float	mtrx_det(const mtrx4_t &m); //bad
+float	mtrx_det(const mtrx4_t &m); /* empty */
+
+template <typename mtrxT_t, int mrange>
+float	mtrx_det_lu(const mtrxT_t &m);
 
 template <typename mtrxT_t, int mrange>
 mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b);
@@ -354,6 +357,12 @@ mtrx4_t mtrx_invert(const mtrx4_t &m);
 
 template <typename mtrxT_t, typename vecT_t, int mrange>
 vecT_t 	mtrx_solve_gauss(const mtrxT_t &m, const vecT_t &v);
+
+template <typename mtrxT_t, typename vecT_t, int mrange>
+mtrxT_t mtrx_insert_row(const mtrxT_t &m, const vecT_t &v, int row); /* empty */ 
+
+template <typename mtrxT_t, typename vecT_t, int mrange>
+vecT_t 	mtrx_solve_kramer(const mtrxT_t &m, const vecT_t &v); /* empty */
 
 void 	qtnn_show(const qtnn_t &q); 
 float	qtnn_lenght(const qtnn_t &q);

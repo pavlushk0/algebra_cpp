@@ -158,6 +158,28 @@ float mtrx_det(const mtrx4_t &m) {
 }
 
 template <typename mtrxT_t, int mrange>
+float	mtrx_det_lu(const mtrxT_t &m) {
+	int i;
+	tuple<mtrxT_t, mtrxT_t> lu;
+	float l_det, u_det;
+
+	lu = mtrx_lu<mtrxT_t, mrange>(m);
+
+	l_det = get<0>(lu)[0];
+	u_det = get<1>(lu)[0];
+
+	for (i = 1; i < mrange; i++) {
+		l_det *= get<0>(lu)[id_rw(i, i, mrange)];
+		u_det *= get<1>(lu)[id_rw(i, i, mrange)];
+	}
+
+	return l_det*u_det;
+}
+template float mtrx_det_lu<mtrx2_t, 2>(const mtrx2_t &m);
+template float mtrx_det_lu<mtrx3_t, 3>(const mtrx3_t &m);
+template float mtrx_det_lu<mtrx4_t, 4>(const mtrx4_t &m);
+
+template <typename mtrxT_t, int mrange>
 mtrxT_t mtrx_mult(const mtrxT_t &a, const mtrxT_t &b) {
 	mtrxT_t rt;
 	int32_t i, j, k;
@@ -537,45 +559,45 @@ mtrx4_t mtrx_invert(const mtrx4_t &m) {
 template <typename mtrxT_t, typename vecT_t, int mrange>
 vecT_t mtrx_solve_gauss(const mtrxT_t &m, const vecT_t &v) {
 	int i, j, k;
-	float temp, t;
-    mtrxT_t a;
+	float t;
+    float a[mrange][mrange+1];
     vecT_t rt;
      
     for (i = 0; i < mrange; ++i) {
         for (j = 0; j < mrange; ++j) {
-            a[id_rw(i, j, mrange)] = m[id_rw(i, j, mrange)];
-        	a[id_rw(i, mrange, mrange)] = v[i];
+            a[i][j] = m[id_rw(i, j, mrange)];
+        	a[i][mrange] = v[i];
 		}
     }
     
+	/* Pivotisation */
 	for (i = 0; i < mrange; i++) {                    
         for (k = i + 1; k < mrange; k++) {
-            if (abs(a[id_rw(i, i, mrange)]) < abs(a[id_rw(k, i, mrange)])) {
+            if (abs(a[i][i]) < abs(a[k][i])) {
                 for (j = 0; j <= mrange; j++) {
-                    temp = a[id_rw(i, j, mrange)];
-                    a[id_rw(i, j, mrange)] = a[id_rw(k, j, mrange)];
-                    a[id_rw(k, j, mrange)] = temp;
+                    t = a[i][j];
+                    a[i][j] = a[k][j];
+                    a[k][j] = t;
                 }
 			}
 		}
 	}
-
-    for (i = 0; i < mrange-1; i++) {        
-        for (k = i + 1; k < mrange; k++) {
-            t = a[id_rw(k, i, mrange)] / a[id_rw(i, i, mrange)];
-            for ( j = 0; j <= mrange; j++) {
-                a[id_rw(k, j, mrange)]=a[id_rw(i, j, mrange)]-t*a[id_rw(i, j, mrange)];
+	
+	/* прямой ход */
+    for (k = 1; k < mrange; k++) {        
+        for (j = k; j < mrange; j++) {
+            t = a[j][k-1] / a[k-1][k-1];
+            for (i = 0; i < mrange+1; i++) {
+                a[j][i] = a[j][i] - t*a[k-1][i];
             }
 		}
 	}
     
-    for (i = mrange-1; i >= 0; i--) {                            
-        rt[i] = a[id_rw(i, mrange, mrange)];                
-        for (j = i+1; j < mrange; j++) {
-            if (j != i) {                
-                rt[i] = rt[i] - a[id_rw(i, j, mrange)] * rt[j];
-			}
-        	rt[i] = rt[i] / a[id_rw(i, i, mrange)];
+	/* обратный ход */
+    for (i = mrange - 1; i >= 0; i--) {                            
+        rt[i] = a[i][mrange] / a[i][i];                
+        for (j = mrange - 1; j > i; j--) {
+            rt[i] = rt[i] - a[i][j] * rt[j] / a[i][i];
 		}            
     }
 
@@ -584,3 +606,19 @@ vecT_t mtrx_solve_gauss(const mtrxT_t &m, const vecT_t &v) {
 template vec2_t mtrx_solve_gauss<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t &v);
 template vec3_t mtrx_solve_gauss<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v);
 template vec4_t mtrx_solve_gauss<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v);
+
+template <typename mtrxT_t, typename vecT_t, int mrange>
+mtrxT_t mtrx_insert_row(const mtrxT_t &m, const vecT_t &v, int row) {
+	return mtrxT_t();
+}
+template mtrx2_t mtrx_insert_row<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t &v, int row);
+template mtrx3_t mtrx_insert_row<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v, int row);
+template mtrx4_t mtrx_insert_row<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v, int row);
+
+template <typename mtrxT_t, typename vecT_t, int mrange>
+vecT_t 	mtrx_solve_kramer(const mtrxT_t &m, const vecT_t &v) {
+	return vecT_t();
+}
+template vec2_t mtrx_solve_kramer<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t &v);
+template vec3_t mtrx_solve_kramer<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v);
+template vec4_t mtrx_solve_kramer<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v);
