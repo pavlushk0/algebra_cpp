@@ -359,7 +359,7 @@ template <typename mtrxT_t, typename vecT_t, int mrange>
 vecT_t 	mtrx_solve_gauss(const mtrxT_t &m, const vecT_t &v);
 
 template <typename mtrxT_t, typename vecT_t, int mrange>
-mtrxT_t mtrx_insert_row(const mtrxT_t &m, const vecT_t &v, int row); /* empty */ 
+mtrxT_t mtrx_insert_cmn(const mtrxT_t &m, const vecT_t &v, int cmn); /* empty */ 
 
 template <typename mtrxT_t, typename vecT_t, int mrange>
 vecT_t 	mtrx_solve_kramer(const mtrxT_t &m, const vecT_t &v); /* empty */

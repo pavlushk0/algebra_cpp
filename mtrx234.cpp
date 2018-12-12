@@ -233,7 +233,7 @@ vec3_t mtrx_mult_vec(const mtrx4_t &m, const vec3_t &v) {
 
 /*
 	Где-то здесь ошибка, долго искал
-	ничего не вышло и взял код из сети
+	ничего не нашел и взял код из сети
 */
 /*
 func mtrx3_lu(m mtrx3_t) (l, u mtrx3_t) {
@@ -608,16 +608,52 @@ template vec3_t mtrx_solve_gauss<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec
 template vec4_t mtrx_solve_gauss<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v);
 
 template <typename mtrxT_t, typename vecT_t, int mrange>
-mtrxT_t mtrx_insert_row(const mtrxT_t &m, const vecT_t &v, int row) {
-	return mtrxT_t();
+mtrxT_t mtrx_insert_cmn(const mtrxT_t &m, const vecT_t &v, int cmn) {
+	int i, j = 0;
+	mtrxT_t rt;
+	/*
+	for (i = 0; i < mrange; i++) {
+		for (j = 0; j < mrange; j++) {
+			rt[id_rw(i, j, mrange)] = m[id_rw(i, j, mrange)];
+
+			if (j == cmn) {
+				rt[id_rw(i, j, mrange)] = v[i];
+			}
+		}
+	}
+	*/
+	rt = m;
+
+	for (i = cmn; i < mrange*mrange; i += mrange) {
+		rt[i] = v[j++];
+	}
+
+	return rt;
 }
-template mtrx2_t mtrx_insert_row<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t &v, int row);
-template mtrx3_t mtrx_insert_row<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v, int row);
-template mtrx4_t mtrx_insert_row<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v, int row);
+template mtrx2_t mtrx_insert_cmn<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t &v, int row);
+template mtrx3_t mtrx_insert_cmn<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v, int row);
+template mtrx4_t mtrx_insert_cmn<mtrx4_t, vec4_t, 4>(const mtrx4_t &m, const vec4_t &v, int row);
 
 template <typename mtrxT_t, typename vecT_t, int mrange>
 vecT_t 	mtrx_solve_kramer(const mtrxT_t &m, const vecT_t &v) {
-	return vecT_t();
+	int i;
+	float det;
+	mtrxT_t kr_mtrx;
+	vecT_t rt;
+
+	det = mtrx_det_lu<mtrxT_t, mrange>(m);
+
+	if (abs(det) < f_eps) {
+		cout << "mtrx_solve_kramer(): system has no solve\n";
+		return vecT_t();
+	}
+
+	for (i = 0; i < mrange; i++) {
+		kr_mtrx = mtrx_insert_cmn<mtrxT_t, vecT_t, mrange>(m, v, i);
+		rt[i] = mtrx_det_lu<mtrxT_t, mrange>(kr_mtrx) / det;
+	}
+	
+	return rt;
 }
 template vec2_t mtrx_solve_kramer<mtrx2_t, vec2_t, 2>(const mtrx2_t &m, const vec2_t &v);
 template vec3_t mtrx_solve_kramer<mtrx3_t, vec3_t, 3>(const mtrx3_t &m, const vec3_t &v);

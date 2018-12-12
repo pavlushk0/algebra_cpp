@@ -21,12 +21,16 @@ int main(int argc, char *argv[]) {
 	mtrx_show<mtrx4_t, 4>(m);
 	printf("\n");
 
-	X = mtrx_solve_gauss<mtrx4_t, vec4_t, 4>(m, b);
+	X = mtrx_solve_kramer<mtrx4_t, vec4_t, 4>(m, b);
 
 	vec_show<vec4_t, 4>(X);
 	printf("\n");
 
 	printf("detrminant LU = %.f\n", mtrx_det_lu<mtrx4_t, 4>(m));
+	printf("\n");
+
+	m = mtrx_insert_cmn<mtrx4_t, vec4_t, 4>(m, X, 2);
+	mtrx_show<mtrx4_t, 4>(m);
 	printf("\n");
 /*
 	auto ret = mtrx_lu<mtrx4_t, 4>(m);
