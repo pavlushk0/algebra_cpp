@@ -277,6 +277,39 @@ class qtnn_t {
 		float data[4];
 };
 
+class plane_t {
+	public:
+		float operator[](const int32_t id) const {
+			return data[id];
+		};
+
+		float &operator[](const int32_t id) {
+			return data[id];
+		};
+
+		plane_t &operator=(const plane_t &p) {
+			data[_XC] = p[_XC];
+			data[_YC] = p[_YC];
+			data[_ZC] = p[_ZC];
+			data[_WC] = p[_WC];
+
+			return (*this);
+		};
+
+		plane_t(): 
+			data{0.0, 0.0, 0.0, 0.0} {};
+		
+		plane_t(const float x, const float y, const float z, const float w): 
+			data{x, y, z, w} {};
+
+		plane_t(const vec3_t &v, float d); /*empty*/
+
+		plane_t(const vec3_t &v1, const vec3_t &v2, const vec3_t &v3); /*empty*/
+
+	private:
+		float data[4];
+};
+
 const float f_eps = 0.00001f;
 
 /*	multidimensional array mapping, array[i][j]
@@ -359,10 +392,10 @@ template <typename mtrxT_t, typename vecT_t, int mrange>
 vecT_t 	mtrx_solve_gauss(const mtrxT_t &m, const vecT_t &v);
 
 template <typename mtrxT_t, typename vecT_t, int mrange>
-mtrxT_t mtrx_insert_cmn(const mtrxT_t &m, const vecT_t &v, int cmn); /* empty */ 
+mtrxT_t mtrx_insert_cmn(const mtrxT_t &m, const vecT_t &v, int cmn);  
 
 template <typename mtrxT_t, typename vecT_t, int mrange>
-vecT_t 	mtrx_solve_kramer(const mtrxT_t &m, const vecT_t &v); /* empty */
+vecT_t 	mtrx_solve_kramer(const mtrxT_t &m, const vecT_t &v); 
 
 void 	qtnn_show(const qtnn_t &q); 
 float	qtnn_lenght(const qtnn_t &q);
@@ -376,3 +409,9 @@ qtnn_t  qtnn_mult(const qtnn_t &a, const qtnn_t &b);
 qtnn_t  qtnn_mult_vec3(const qtnn_t a, const qtnn_t &b);
 vec3_t  qtnn_to_vec3(const qtnn_t &q);
 vec3_t  qtnn_transform_vec3(const qtnn_t &a, const vec3_t &b);
+
+vec3_t 	plane_ray_insct(const vec3_t &rs, const vec3_t &re); /*empty*/
+bool	point_in_trngl(const vec3_t &v1, 
+					   const vec3_t &v2, 
+					   const vec3_t &v3,
+					   const vec3_t &point);

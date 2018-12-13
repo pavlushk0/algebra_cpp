@@ -4,7 +4,7 @@ FLAGS    := -Wall -std=c++17
 LIBS 	 := -lstdc++
 RM       := rm -f
 
-SRCS := test.cpp mtrx234.cpp vec234.cpp qtnn.cpp
+SRCS := test.cpp mtrx234.cpp vec234.cpp qtnn.cpp plane.cpp
 OBJS := $(SRCS:.cpp=.o)
 
 $(info COMMON MAKEFILE)
