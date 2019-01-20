@@ -7,6 +7,8 @@ using namespace std;
 enum {_XC, _YC, _ZC, _WC};
 enum mtrx_type {MTRX_IDTT, MTRX_ZERO};
 
+constexpr float f_eps = 5.96e-08;
+
 class vec2_t {
 	public:
 		float operator[](const int32_t id) const {
@@ -309,8 +311,6 @@ class plane_t {
 	private:
 		float data[4];
 };
-
-const float f_eps = 0.00001f;
 
 /*	multidimensional array mapping, array[i][j]
 	row-wise (C, C++):
