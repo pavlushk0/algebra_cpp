@@ -120,10 +120,6 @@ template vec2_t vec_sub<vec2_t, 2>(const vec2_t &a, const vec2_t &b);
 template vec3_t vec_sub<vec3_t, 3>(const vec3_t &a, const vec3_t &b);
 template vec4_t vec_sub<vec4_t, 4>(const vec4_t &a, const vec4_t &b);
 
-vec2_t vec_cross(vec2_t &a, vec2_t &b) {
-	return vec2_t();
-}
-
 vec3_t vec_cross(vec3_t &a, vec3_t &b) {
 	vec3_t rt;
 	
@@ -132,8 +128,4 @@ vec3_t vec_cross(vec3_t &a, vec3_t &b) {
 	rt[2] = a[_XC]*b[_YC] - a[_YC]*b[_XC];
 
 	return rt;
-}
-
-vec4_t vec_cross(vec4_t &a, vec4_t &b) {
-	return vec4_t();
 }

@@ -330,6 +330,21 @@ constexpr int32_t id_cw(int32_t i, int32_t j, int32_t n) {
 	return (j*n + i);
 };
 
+/*	Very dirty thing.
+	It's here just to be and to write not to much text.
+	Don't use it often. */
+#define _M2_ mtrx2_t, 2
+#define _M3_ mtrx3_t, 3
+#define _M4_ mtrx4_t, 4
+
+#define _V2_ vec2_t, 2
+#define _V3_ vec3_t, 3
+#define _V4_ vec4_t, 4
+
+#define _M2V2_ mtrx2_t, vec2_t, 2
+#define _M3V3_ mtrx3_t, vec3_t, 3
+#define _M4V4_ mtrx4_t, vec4_t, 4
+
 template <typename vecT_t, int range>
 void 	vec_show(const vecT_t &v);
 
@@ -354,9 +369,7 @@ vecT_t	vec_sum(const vecT_t &a, const vecT_t &b);
 template <typename vecT_t, int range>
 vecT_t	vec_sub(const vecT_t &a, const vecT_t &b);
 
-vec2_t	vec_cross(const vec2_t &a, const vec2_t &b); /* empty */
 vec3_t  vec_cross(const vec3_t &a, const vec3_t &b);
-vec4_t  vec_cross(const vec4_t &a, const vec4_t &b); /* empty */
 
 template <typename mtrxT_t, int mrange>
 void mtrx_show(const mtrxT_t &m);
