@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <tuple>
 
 using namespace std;
@@ -8,6 +9,9 @@ enum {_XC, _YC, _ZC, _WC};
 enum mtrx_type {MTRX_IDTT, MTRX_ZERO};
 
 constexpr float f_eps = 5.96e-08;
+constexpr float deg_to_rad(float deg) {
+	return deg * M_PI/180.0f;
+}
 
 class vec2_t {
 	public:

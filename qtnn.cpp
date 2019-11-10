@@ -27,7 +27,7 @@ qtnn_t qtnn_normalize(const qtnn_t &q) {
 		rt[_YC] = q[_YC] / len;
 		rt[_ZC] = q[_ZC] / len;
 	} else {
-		printf("qtnn_normalize_self(): quaternion is too short!");
+		printf("qtnn_normalize(): quaternion is too short!");
 		return qtnn_t();
 	}
 
@@ -108,9 +108,9 @@ qtnn_t qtnn_mult_vec3(const qtnn_t &a, const vec3_t &b) {
 qtnn_t::qtnn_t(const vec3_t &ax, float phi) {
     float sinhalfphi;
 
-	sinhalfphi = sinf(phi * 0.5);
+	sinhalfphi = sinf(deg_to_rad(phi * 0.5f));
 
-	data[_WC] = cosf(phi * 0.5);
+	data[_WC] = cosf(deg_to_rad(phi * 0.5f));
 	data[_XC] = ax[_XC] * sinhalfphi;
 	data[_YC] = ax[_YC] * sinhalfphi;
 	data[_ZC] = ax[_ZC] * sinhalfphi;

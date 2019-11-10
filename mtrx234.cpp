@@ -7,8 +7,8 @@
 using namespace std;
 
 mtrx2_t::mtrx2_t(float phi) {
-	float sinphi = sinf(phi);
-	float cosphi = cosf(phi);
+	float sinphi = sinf(deg_to_rad(phi));
+	float cosphi = cosf(deg_to_rad(phi));
 
 	data[0] = cosphi;
 	data[1] = -sinphi;
@@ -16,15 +16,16 @@ mtrx2_t::mtrx2_t(float phi) {
 	data[3] = cosphi;
 }
 
+/* DEBUG !!!! */
 mtrx3_t::mtrx3_t(float yaw, float pitch, float roll) {
 	float cosy, siny, cosp, sinp, cosr, sinr;
 	
-	cosy = cosf(yaw);
-	siny = sinf(yaw);
-	cosp = cosf(pitch);
-	sinp = sinf(pitch);
-	cosr = cosf(roll);
-	sinr = sinf(roll);
+	cosy = cosf(deg_to_rad(yaw));
+	siny = sinf(deg_to_rad(yaw));
+	cosp = cosf(deg_to_rad(pitch));
+	sinp = sinf(deg_to_rad(pitch));
+	cosr = cosf(deg_to_rad(roll));
+	sinr = sinf(deg_to_rad(roll));
 
 	data[0] = cosy*cosr - siny*cosp*sinr;
 	data[1] = -cosy*sinr - siny*cosp*cosr;
@@ -39,11 +40,12 @@ mtrx3_t::mtrx3_t(float yaw, float pitch, float roll) {
 	data[8] = cosp;
 }
 
+/* DEBUG !!!! */
 mtrx3_t::mtrx3_t(const vec3_t &ax, float phi) {
 	float cosphi, sinphi, vxvy, vxvz, vyvz, vx, vy, vz;
 
-	cosphi = cosf(phi);
-	sinphi = sinf(phi);
+	cosphi = cosf(deg_to_rad(phi));
+	sinphi = sinf(deg_to_rad(phi));
 	vxvy = ax[_XC] * ax[_YC];
 	vxvz = ax[_XC] * ax[_ZC];
 	vyvz = ax[_YC] * ax[_ZC];
@@ -51,28 +53,28 @@ mtrx3_t::mtrx3_t(const vec3_t &ax, float phi) {
 	vy = ax[_YC];
 	vz = ax[_ZC];
 
-	data[0] = cosphi + (1.0-cosphi)*vx*vx;
-	data[1] = (1.0-cosphi)*vxvy - sinphi*vz;
-	data[2] = (1.0-cosphi)*vxvz + sinphi*vy;
+	data[0] = cosphi + (1.0f-cosphi)*vx*vx;
+	data[1] = (1.0f-cosphi)*vxvy - sinphi*vz;
+	data[2] = (1.0f-cosphi)*vxvz + sinphi*vy;
 
-	data[3] = (1.0-cosphi)*vxvy + sinphi*vz;
-	data[4] = cosphi + (1.0-cosphi)*vy*vy;
-	data[5] = (1.0-cosphi)*vyvz - sinphi*vz;
+	data[3] = (1.0f-cosphi)*vxvy + sinphi*vz;
+	data[4] = cosphi + (1.0f-cosphi)*vy*vy;
+	data[5] = (1.0f-cosphi)*vyvz - sinphi*vz;
 
-	data[6] = (1.0-cosphi)*vxvz - sinphi*vy;
-	data[7] = (1.0-cosphi)*vyvz + sinphi*vx;
-	data[8] = cosphi + (1.0-cosphi)*vz*vz;
+	data[6] = (1.0f-cosphi)*vxvz - sinphi*vy;
+	data[7] = (1.0f-cosphi)*vyvz + sinphi*vx;
+	data[8] = cosphi + (1.0f-cosphi)*vz*vz;
 }
 
 mtrx4_t::mtrx4_t(float yaw, float pitch, float roll) {
 	float cosy, siny, cosp, sinp, cosr, sinr;
 	
-	cosy = cosf(yaw);
-	siny = sinf(yaw);
-	cosp = cosf(pitch);
-	sinp = sinf(pitch);
-	cosr = cosf(roll);
-	sinr = sinf(roll);
+	cosy = cosf(deg_to_rad(yaw));
+	siny = sinf(deg_to_rad(yaw));
+	cosp = cosf(deg_to_rad(pitch));
+	sinp = sinf(deg_to_rad(pitch));
+	cosr = cosf(deg_to_rad(roll));
+	sinr = sinf(deg_to_rad(roll));
 
 	data[0]  = cosy*cosr - siny*cosp*sinr;
 	data[1]  = -cosy*sinr - siny*cosp*cosr;
@@ -98,8 +100,8 @@ mtrx4_t::mtrx4_t(float yaw, float pitch, float roll) {
 mtrx4_t::mtrx4_t(const vec3_t &ax, float phi) {
 	float cosphi, sinphi, vxvy, vxvz, vyvz, vx, vy, vz;
 
-	cosphi = cosf(phi);
-	sinphi = sinf(phi);
+	cosphi = cosf(deg_to_rad(phi));
+	sinphi = sinf(deg_to_rad(phi));
 	vxvy = ax[_XC] * ax[_YC];
 	vxvz = ax[_XC] * ax[_ZC];
 	vyvz = ax[_YC] * ax[_ZC];
