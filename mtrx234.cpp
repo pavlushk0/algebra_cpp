@@ -143,6 +143,49 @@ template void mtrx_show<mtrx2_t, 2>(const mtrx2_t &m);
 template void mtrx_show<mtrx3_t, 3>(const mtrx3_t &m);
 template void mtrx_show<mtrx4_t, 4>(const mtrx4_t &m);
 
+mtrx3_t mtrx_set_yaw(float angl) {
+	float sa, ca;
+	mtrx3_t rt;
+
+	sa = sinf(deg_to_rad(angl));
+	ca = cosf(deg_to_rad(angl));
+
+	rt[0] = ca;   rt[1] = -sa;  rt[2] = 0.0f;
+	rt[3] = sa;   rt[4] =  ca;  rt[5] = 0.0f;
+	rt[6] = 0.0f; rt[7] = 0.0f; rt[8] = 1.0f;
+
+	return rt;
+}
+
+mtrx3_t mtrx_set_pitch(float angl) {
+	float sa, ca;
+	mtrx3_t rt;
+
+	sa = sinf(deg_to_rad(angl));
+	ca = cosf(deg_to_rad(angl));
+
+	rt[0] = 1.0f; rt[1] = 0.0f; rt[2] = 0.0f;
+	rt[3] = 0.0f; rt[4] = ca;   rt[5] = -sa;
+	rt[6] = 0.0f; rt[7] = sa;   rt[8] = ca;
+
+	return rt;
+}
+
+mtrx3_t mtrx_set_roll(float angl)
+{
+	float sa, ca;
+	mtrx3_t rt;
+
+	sa = sinf(deg_to_rad(angl));
+	ca = cosf(deg_to_rad(angl));
+
+	rt[0] = ca;   rt[1] = 0.0f; rt[2] = sa;
+	rt[3] = 0.0f; rt[4] = 1.0f; rt[5] = 0.0f;
+	rt[6] = -sa;  rt[7] = 0.0f; rt[8] = ca;
+
+	return rt;
+}
+
 float mtrx_det(const mtrx2_t &m) {
 	return m[0]*m[3] - m[1]*m[2];
 }

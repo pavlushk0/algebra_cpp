@@ -378,6 +378,10 @@ vec3_t  vec_cross(const vec3_t &a, const vec3_t &b);
 template <typename mtrxT_t, int mrange>
 void mtrx_show(const mtrxT_t &m);
 
+mtrx3_t mtrx_set_yaw(float angl);
+mtrx3_t mtrx_set_pitch(float angl);
+mtrx3_t mtrx_set_roll(float angl);
+
 float	mtrx_det(const mtrx2_t &m);
 float	mtrx_det(const mtrx3_t &m);
 float	mtrx_det(const mtrx4_t &m); /* empty */
