@@ -10,7 +10,7 @@ enum mtrx_type {MTRX_IDTT, MTRX_ZERO};
 
 constexpr float f_eps = 5.96e-08;
 constexpr float deg_to_rad(float deg) {
-	return deg * M_PI/180.0f;
+	return deg * 3.14/180.0f;
 }
 
 class vec2_t {
